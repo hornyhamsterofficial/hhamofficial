@@ -1,0 +1,470 @@
+@keyframes fadeIn {
+    from {
+        opacity: 0; /* Fully black */
+    }
+    to {
+        opacity: 1; /* Fully visible */
+    }
+}
+
+@media (max-width: 768px) {
+    html {
+        font-size: 70%; /* Scale everything proportionally */
+    }
+   
+
+}
+
+
+
+@media (max-width: 768px) {
+    .dropdown-menu {
+        text-align: center; /* Center links within the dropdown */
+        padding: 0; /* Remove default padding that might affect spacing */
+    }
+
+    .nav-link {
+        display: inline-block; /* Wrap background only around the content */
+        border-radius: 10px; /* Optional: Rounded corners for hover effect */
+        margin: 5px 0; /* Vertical spacing between links */
+        width: 50px; /* Avoid stretching to full width */
+        text-align: center; /* Align text */
+    }
+
+    .nav-link:hover {
+        background-color: rgba(240, 248, 255, 0.5); /* Subtle background color */
+        color: white; /* Change text color on hover */
+        padding: 2px /* Maintain consistent padding on hover */
+    }
+}
+
+
+
+html, body {
+    min-height: 100vh; /* Ensure the content takes up at least the full viewport height */
+    margin: 0; /* Remove default margin */
+    overflow: auto; /* Allow scrolling */
+    
+}
+    
+@media(max-width: 768){
+    html, body {
+     
+        overflow: auto; /* Allow scrolling */
+        
+    }
+
+    .logo {
+        margin-right: 100px;
+    }
+}
+
+
+/* General Styles */
+body {
+    font-family: 'Lora', serif;
+    padding-top: 35px;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    background-color: #F6BA31;
+    color: rgb(255, 255, 255);
+    text-align: center;
+    animation: fadeIn 1.5s ease-in-out; /* Duration and easing */
+    opacity: 1; /* Ensure visibility post-animation */
+}
+
+/* Keyframes for Fade-In */
+@keyframes fadeInContent {
+    0% {
+        opacity: 0; /* Content fully invisible */
+    }
+    100% {
+        opacity: 1; /* Content fully visible */
+    }
+}
+
+
+
+.landing {
+    min-height: calc(100vh - 80px); /* Subtract the height of the navbar and footer */
+    padding: 20px;
+    flex: 1;
+}
+
+.logo {
+    max-width: 100%; /* 20% larger while responsive */
+    height: auto; /* Maintain aspect ratio */
+    
+}
+
+/* HornyHamster Title Animation */
+#animated-title {
+    position: relative; /* Needed for animation */
+    font-family: 'Playfair Display', serif;
+    font-size: 6rem;
+    color: rgb(255, 255, 255);
+    text-align: center;
+    animation: slideIn 2s ease-in-out; /* Slide-in animation */
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 3);
+}
+
+/* Keyframes for the Sliding Animation */
+@keyframes slideIn {
+    from {
+        transform: translateX(-100vw); /* Start off-screen to the left */
+        opacity: 0; /* Fully transparent at the start */
+    }
+    to {
+        transform: translateX(0); /* End in the center */
+        opacity: 1; /* Fully visible at the end */
+    }
+}
+
+h1, h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
+
+p {
+    font-family: 'Lora', serif;
+    font-size: 1.5rem;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: center; /* Centers items horizontally */
+    align-items: center;    /* Centers items vertically */
+    font-family: 'Lora', serif;
+    background-color: #ffb300;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease; /* Smooth hide/show animation */
+    transform: translateY(0); /* Ensure navbar starts visible */
+}
+
+/* Sparkles or Decorative Lines */
+.navbar::before,
+.navbar::after {
+    background: linear-gradient(45deg, rgb(242, 242, 231), rgb(152, 150, 145), rgb(91, 251, 11));
+    /* stylelint-disable-next-line property-no-vendor-prefix */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    content: '🐾'; 
+    position: absolute;
+    padding-left: 100px;
+    padding-right: 100px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.8); /* Light sparkle color */
+    pointer-events: none; /* Prevent interference with clicks */
+}
+/* Adjustments for Smaller Screens */
+@media (max-width: 768px) {
+    .navbar-toggle {
+        display: block; /* Show hamburger menu button */
+    }
+
+    .navbar-container {
+        display: none; /* Hide links by default */
+        flex-direction: column; /* Stack links vertically */
+        background-color: rgb(253, 179, 5, .97); /* Match navbar background */
+        position: absolute;
+         top: 5px; /*Position below the navbar */
+        left: 0;
+        width: 100%; /* Full width dropdown */
+       padding-bottom: 100px;
+        z-index: 1000; /* Ensure above content */
+        
+    }
+
+    .navbar-container.active {
+        display:inline-flex; /* Show links when active */
+        padding-right: 200px;
+    }
+
+    .nav-link {
+        text-align: center; /* Center links */
+        padding: 5px 0; /* Add spacing between links */
+        width: 100%; /* Full width links */
+    }
+
+    .navbar::before,
+    .navbar::after {
+        display: none; /* Hide paw prints in mobile view */
+    }
+}
+
+
+
+
+.navbar::before {
+    left: 20px; /* Position on the left */
+
+}
+
+.navbar::after {
+    right: 20px; /* Position on the right */
+}
+
+.navbar-container {
+    display: flex;
+    justify-content: center; /* Proper alignment of links and toggle button */
+    align-items: center;
+    padding: 10px 20px; /* Adds internal padding to the navbar */
+    gap: 50px; /* Moderate spacing between elements */
+}
+
+.navbar-toggle {
+    display: none; /* Hidden by default */
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: black;
+    padding: 5px;
+    align-items: center;
+    margin-right: 60px;
+    
+}
+
+
+
+/* Navbar Links */
+.nav-link {
+    font-family: 'Lora', serif;
+    font-size: 1.1rem;
+    text-decoration: none;
+    color: rgb(82, 75, 75);
+    font-weight: bold;
+    padding: 1px 2px; /* Adds clickable padding around links */
+    position: relative; /* Needed for ::after positioning */
+    transition: color 0.3s ease;
+    text-align: center; /* Ensure text is centered */
+}
+
+.nav-link.active {
+    font-weight: bold;
+    color: rgb(82, 75, 75); /* Highlight color */
+    text-decoration:overline;
+}
+
+
+
+.nav-link:hover {
+    color: white;
+}
+
+/* hamster underneath */
+.nav-link::after {
+    content: ''; /* Create the squiggly line */
+    position: absolute;
+    left: 50%; /* Start at the center */
+    bottom: -23px; /* Position below the text */
+    transform: translateX(-50%) scaleX(0); /* Center it and start hidden */
+    width: 100%;
+    height: 29px; /* Adjust as needed */
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="80" height="80" viewBox="0 0 20 20"><text y="15" font-size="15">🐹</text></svg>');    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    transform-origin: center; /* Scale animation from the center */
+    transition: transform 0.3s ease; /* Smooth reveal */
+    
+}
+
+.nav-link:hover::after {
+    transform: translateX(-50%) scaleX(1); /* Reveal squiggly line */
+}
+
+/* aboutstuff */
+/* General Section Styles */
+.section {
+    padding: 5px 20px;
+    text-align: center;
+    list-style: none;
+  }
+  
+  .section-content ul {
+    list-style: none; /* Removes bullet points */
+    padding: 0; /* Removes extra left padding */
+    margin: 0; /* Removes extra top/bottom margin */
+}
+
+.section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    color: #e69600c5; /* Slightly darker shade of gold */
+    margin-bottom: 20px;
+    padding-top: 20px;
+    text-shadow: 1px 1px 2px rgba(0, 5, 0, 3); /* Sharper, more defined shadow */
+    list-style: none;
+}
+
+.contact-section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    color: #e69600c5; /* Slightly darker shade of gold */
+    margin-bottom: 20px;
+    padding-top: 5px;
+    text-shadow: 1px 1px 2px rgba(0, 5, 0, 3); /* Sharper, more defined shadow */
+    list-style: none;
+}
+
+
+  
+  .section-content {
+    font-family: 'Lora', serif;
+    font-size: 1.4rem;
+    line-height: 1.5;
+    color: #826115;
+    max-width: 800px;
+    margin: 0 auto;
+    list-style: none;
+  }
+
+ 
+
+
+/* Footer */
+.footer {
+    font-family: 'Lora', serif;
+    background-color: transparent; /* Makes the background invisible */
+    color: white;
+    text-align: center;
+    position: relative;
+    padding: 10px 0;
+    width: 100%;
+    font-size: 0.9rem;
+    transition: transform 0.3s ease-in-out; /* Smooth hide/show effect */
+    transform: translateY(0); /* Ensure footer starts visible */
+}
+
+/* Social Icons Section */
+.social-icons-container {
+    margin: 10px auto; /* Center and add vertical spacing */
+    text-align: center;
+    padding: 10px 0; /* Proper padding around the container */
+    
+    
+}
+
+
+.social-icons-container h2 {
+    
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    color: #fcf4b9; /* Gold-ish heading color */
+    margin-bottom: 20px;
+}
+
+.social-icons {
+    
+    display: flex;
+    justify-content: center; /* Center align icons */
+    gap: 20px; /* Space between icons */
+    z-index: 1; /* Ensure it stays above other elements */
+    margin-top: 20px; /* Space above icons */
+}
+
+.contact-box {
+    background-color: rgba(235, 230, 230, 0.326); /* Semi-transparent background */
+    border-radius: 10px; /* Rounded corners */
+    padding: 20px; /* Internal spacing */
+    margin: 20px auto; /* Centered on the page */
+    text-align: center; /* Center-align content */
+    width: 90%; /* Full width on smaller screens */
+    max-width: 400px; /* Restricts the box size on larger screens */
+}
+
+.social-link {
+    font-size: 2.5rem; /* Icon size */
+    color: #333; /* Dark color for icons */
+    text-decoration: none; /* Remove underline */
+    transition: color 0.3s ease; /* Smooth hover effect */
+  }
+  
+  .social-link:hover {
+    color: #ffd700; /* Gold on hover */
+  }
+
+.icon-link {
+    font-family: 'Lora', serif;
+    font-size: 1.1rem;
+    color: white;
+    text-transform: uppercase;
+    text-decoration: none;
+    background-color: #ffb300;
+    padding: 10px 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.icon-link:hover {
+    background-color: #56f33d; /* Brighter gold on hover */
+    transform: translateY(-5px); /* Slight lift effect */
+    color: white;
+}
+
+/* Responsive Navbar */
+@media (max-width: 768px) {
+    .navbar-toggle {
+        display: block; /* Show on mobile */
+    }
+
+    .nav-link {
+        display: none; /* Hide links by default */
+    }
+
+    .navbar-container.active .nav-link {
+        display: block; /* Show links when dropdown is toggled */
+        margin-right: 55px;
+        text-align: center;
+    }
+}
+
+
+body > div > div > h2 {
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 3);
+    margin-top: -50px;
+}
+
+/* Title Styling */
+.gallery-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    margin: 40px 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Gallery Grid */
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Responsive columns */
+    gap: 20px; /* Spacing between items */
+    margin: 0 auto;
+    padding: 20px;
+    max-width: 1200px;
+}
+
+/* Gallery Images */
+.gallery-grid img {
+    width: 100%;
+    height: 200px; /* Uniform height */
+    object-fit: cover; /* Maintain aspect ratio */
+    border-radius: 10px; /* Optional: Rounded corners */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+    transition: transform 0.3s ease;
+}
+
+.gallery-grid img:hover {
+    transform: scale(1.05); /* Slight zoom effect */
+}

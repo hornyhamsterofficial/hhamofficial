@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meme Generator</title>
+
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400;1,700&family=Playfair+Display:wght@400;700;1,400&display=swap" rel="stylesheet"> -->
+
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* General Styling */
+        body {
+            font-family: 'Lora', serif;
+            background-color: #F6BA31;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+
+
+        /* Title Styling */
+        .meme-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            margin-top: 90px;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            .meme-title {
+                margin-top: 90px;
+                font-size: 2.5rem;
+            }
+
+            /* Hide scrolling containers on mobile */
+            .scrolling-container {
+                display: none;
+            }
+        }
+
+        /* Dropdown Container Styling */
+        .dropdown-container {
+            position: relative;
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            max-width: 522px;
+            /* margin-bottom: 5px; */
+            align-items: center;
+        }
+
+        /* Input Field with Dropdown Button */
+        .input-with-dropdown {
+            position: relative;
+            display: flex;
+            align-items: center;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background-color: white;
+            overflow: hidden;
+            margin-bottom: -10px;
+        }
+
+        @media (max-width: 768px) {
+            .input-with-dropdown {
+
+                align-items: center;
+                margin-bottom: -5px;
+            }
+
+            /* Hide scrolling containers on mobile */
+            .scrolling-container {
+                display: none;
+            }
+
+            #topText {
+                margin-bottom: -1px;
+            }
+        }
+
+        #templateId {
+            flex: 1;
+            border: none;
+            padding: 1px;
+            padding-left: 5px;
+            font-family: 'Lora', serif;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        /* Dropdown Toggle Button Inside Input */
+        .dropdown-toggle {
+            position: absolute;
+            right: 10px;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: #999;
+            user-select: none;
+        }
+
+        /* Dropdown Menu Styling */
+        .dropdown {
+            position: absolute;
+            top: calc(100% + 5px);
+            left: 0;
+            right: 0;
+            max-height: 85px;
+            /* Makes the dropdown scrollable */
+            overflow-y: auto;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            list-style: none;
+            padding: 0;
+            z-index: 100;
+            display: none;
+            /* Initially hidden */
+        }
+
+        /* Open Dropdown */
+        .dropdown.open {
+            display: block;
+        }
+
+        /* Dropdown Menu Items CHANGE TO UL */
+        .dropdown-menu ul {
+            padding: 10px 15px;
+            cursor: pointer;
+            font-family: 'Lora', serif;
+            font-size: 1rem;
+            color: #333;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        /* Dropdown Menu Items HOVER CHANGE TO UL */
+        .dropdown-menu ul:hover {
+            background-color: #f0f0f0;
+            color: #000;
+        }
+
+
+
+
+        /* Slideshow Styling */
+        .slideshow-container {
+            max-width: 600px;
+            position: relative;
+            margin: 30px auto;
+            border-radius: 10px;
+            overflow: hidden;
+
+        }
+
+        @media(max-width: 768px) {
+            .slideshow-container {
+                max-width: 300px;
+                position: relative;
+                margin: 30px auto;
+                border-radius: 10px;
+                overflow: hidden;
+
+            }
+        }
+
+
+        .slide {
+            display: none;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        .slide img {
+            width: 100%;
+            max-height: 400px;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Navigation Buttons */
+        .prev,
+        .next {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 8px 15px;
+            font-size: 1rem;
+            color: #fff;
+            background-color: rgba(0, 0, 0, 0.6);
+            border: none;
+            border-radius: 5px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+            transition: background-color 0.3s ease;
+        }
+
+        .prev:hover,
+        .next:hover {
+            background-color: #fad045;
+        }
+
+        .next {
+            right: 10px;
+        }
+
+        .prev {
+            left: 10px;
+        }
+
+        /* Form Styling */
+        .form-container {
+            font-family: 'Lora', serif;
+            margin-bottom: 20px;
+            margin-left: auto;
+            margin-right: auto;
+            max-width: 600px;
+        }
+
+        @media(max-width: 768px) {
+            .form-container {
+                font-family: 'Lora', serif;
+                margin-bottom: 5px;
+                margin-left: auto;
+                margin-right: auto;
+                max-width: 300px;
+
+            }
+        }
+
+        @media(max-width: 768px) {
+            body>div>div.form-container>div>div>div.input-with-dropdown {
+                max-width: 280px;
+                margin-left: 10px;
+                height: 40px;
+
+            }
+        }
+
+
+
+        .form-container input {
+            width: calc(100% - 40px);
+            max-width: 500px;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        /* Button Styling */
+        .custom-btn {
+            font-family: 'Lora', serif;
+            font-size: 1.1rem;
+            color: white;
+            text-transform: uppercase;
+            text-decoration: none;
+            background-color: #ffb300;
+            padding: 5px 15px;
+            border-radius: 5px;
+            border: none;
+            outline: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .custom-btn:focus {
+            outline: none;
+            box-shadow: 0 4px 8px rgba(255, 179, 0, 0.4);
+        }
+
+        .custom-btn:hover {
+            background-color: #56f33d;
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Modal for Generated Meme */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .modal img {
+            max-width: 90%;
+            max-height: 80%;
+            border-radius: 10px;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 2rem;
+            color: #fff;
+            cursor: pointer;
+        }
+
+
+        .view-gallery-btn {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Lora', serif;
+            font-size: 1rem;
+            color: white;
+            background-color: #ffb300;
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .view-gallery-btn:hover {
+            background-color: #56f33d;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <button class="navbar-toggle" aria-label="Toggle navigation">&#9776;</button>
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="https://pump.fun/board" class="nav-link" target="_blank">Pump.fun</a>
+            <a href="gallery.html" class="nav-link">Endless Euphoria</a>
+            <a href="whitepaper.pdf" class="nav-link" target="_blank">Whitepaper</a>
+            <a href="about.html" class="nav-link">Curious?</a>
+        </div>
+    </nav>
+
+    <!-- Meme Generator Content -->
+    <div class="meme-generator">
+        <h1 class="meme-title">Horny For Memes</h1>
+
+        <!-- Slideshow -->
+        <div class="slideshow-container">
+            <div class="slide">
+                <img src="queen1.jpg" alt="Meme 1">
+            </div>
+            <div class="slide">
+                <img src="hamsterkeikus.jpg" alt="Meme 2">
+            </div>
+            <div class="slide">
+                <img src="hamster1.jpg" alt="Meme 3">
+            </div>
+            <div class="slide">
+                <img src="hamster2.jpg" alt="Meme 4">
+            </div>
+            <div class="slide">
+                <img src="queen2.jpg" alt="Meme 5">
+            </div>
+            <div class="slide">
+                <img src="art1.jpg" alt="Meme 6">
+            </div>
+            <div class="slide">
+                <img src="art2.jpg" alt="Meme 7">
+            </div>
+            <div class="slide">
+                <img src="art3.jpg" alt="Meme 8">
+            </div>
+            <div class="slide">
+                <img src="art4.jpg" alt="Meme 9">
+            </div>
+            <div class="slide">
+                <img src="pose2.jpg" alt="Meme 10">
+            </div>
+            <div class="slide">
+                <img src="vogue.jpg" alt="Meme 11">
+            </div>
+            <div class="slide">
+                <img src="vogue2.jpg" alt="Meme 12">
+            </div>
+            <div class="slide">
+                <img src="cpu.jpg" alt="Meme 13">
+            </div>
+            <div class="slide">
+                <img src="pose.jpg" alt="Meme 14">
+            </div>
+
+            <button class="prev" onclick="changeSlide(-1)">&#10094;</button>
+            <button class="next" onclick="changeSlide(1)">&#10095;</button>
+        </div>
+
+        <!-- Meme Creation Form -->
+        <div class="form-container">
+            <div class="form-container">
+                <div class="dropdown-container">
+                    <div class="input-with-dropdown">
+                        <input type="text" id="templateId" placeholder="Template ID (Optional)">
+                        <span class="dropdown-toggle">▼</span>
+                    </div>
+                    <div class="dropdown">
+                        <ul class="dropdown-menu">
+                            <ul onclick="selectTemplateId('181913649')">181913649 - Drake Hotline Bling</ul>
+                            <ul onclick="selectTemplateId('112126428')">112126428 - Distracted Boyfriend</ul>
+                            <ul onclick="selectTemplateId('87743020')">87743020 - Two Buttons</ul>
+                            <ul onclick="selectTemplateId('124822590')">124822590 - Left Exit 12 Off Ramp</ul>
+                            <ul onclick="selectTemplateId('129242436')">129242436 - Change My Mind</ul>
+                            <ul onclick="selectTemplateId('438680')">438680 - Batman Slapping Robin</ul>
+                            <ul onclick="selectTemplateId('217743513')">217743513 - UNO Draw 25 Cards</ul>
+                            <ul onclick="selectTemplateId('131087935')">131087935 - Running Away Balloon</ul>
+                            <ul onclick="selectTemplateId('61579')">61579 - One Does Not Simply</ul>
+                            <ul onclick="selectTemplateId('93895088')">93895088 - Expanding Brain</ul>
+                            <ul onclick="selectTemplateId('4087833')">4087833 - Waiting Skeleton</ul>
+                            <ul onclick="selectTemplateId('102156234')">102156234 - Mocking Spongebob</ul>
+                            <ul onclick="selectTemplateId('1035805')">1035805 - Boardroom Meeting Suggestion</ul>
+                            <ul onclick="selectTemplateId('97984')">97984 - Disaster Girl</ul>
+                            <ul onclick="selectTemplateId('188390779')">188390779 - Woman Yelling At Cat</ul>
+                            <ul onclick="selectTemplateId('91538330')">91538330 - X, X Everywhere</ul>
+                            <ul onclick="selectTemplateId('101470')">101470 - Ancient Aliens</ul>
+                            <ul onclick="selectTemplateId('247375501')">247375501 - Buff Doge vs. Cheems</ul>
+                            <ul onclick="selectTemplateId('131940431')">131940431 - Gru's Plan</ul>
+                            <ul onclick="selectTemplateId('89370399')">89370399 - Roll Safe Think About It</ul>
+                            <ul onclick="selectTemplateId('222403160')">222403160 - Bernie</ul>
+                            <ul onclick="selectTemplateId('119139145')">119139145 - Blank Nut Button</ul>
+                            <ul onclick="selectTemplateId('61520')">61520 - Futurama Fry</ul>
+                            <ul onclick="selectTemplateId('178591752')">178591752 - Winnie</ul>
+                            <ul onclick="selectTemplateId('155067746')">155067746 - Surprised Pikachu</ul>
+                            <ul onclick="selectTemplateId('114585149')">114585149 - Inhaling Seagull</ul>
+                            <ul onclick="selectTemplateId('5496396')">5496396 - Leonardo Dicaprio Cheers</ul>
+                            <ul onclick="selectTemplateId('135256802')">135256802 - Epic Handshake</ul>
+                            <ul onclick="selectTemplateId('135256802')">135256802 - Epic Handshake</ul>
+                            <ul onclick="selectTemplateId('27813981')">27813981 - Hide the Pain Harold</ul>
+                            <ul onclick="selectTemplateId('123999232')">123999232 - The Scroll Of Truth</ul>
+                            <ul onclick="selectTemplateId('100777631')">100777631 - Is This A Pigeon</ul>
+                            <ul onclick="selectTemplateId('21735')">21735 - The Rock Driving</ul>
+                            <ul onclick="selectTemplateId('80707627')">80707627 - Sad Pablo Escobar</ul>
+                            <ul onclick="selectTemplateId('61532')">61532 - The Most Interesting Man In The World</ul>
+                            <ul onclick="selectTemplateId('226297822')">226297822 - Panik Kalm Panik</ul>
+                            <ul onclick="selectTemplateId('148909805')">148909805 - Monkey Puppet</ul>
+                            <ul onclick="selectTemplateId('124055727')">124055727 - Y'all Got Any More Of That</ul>
+                            <ul onclick="selectTemplateId('28251713')">28251713 - Oprah</ul>
+                            <ul onclick="selectTemplateId('252600902')">252600902 - Always Has Been</ul>
+                            <ul onclick="selectTemplateId('8072285')">8072285 - Doge</ul>
+                            <ul onclick="selectTemplateId('161865971')">161865971 - Marked Safe From</ul>
+                            <ul onclick="selectTemplateId('61585')">61585 - Bad Luck Brian</ul>
+                            <ul onclick="selectTemplateId('101288')">101288 - Third World Skeptical Kid</ul>
+                            <ul onclick="selectTemplateId('134797956')">134797956 - American Chopper Argument</ul>
+                            <ul onclick="selectTemplateId('61539')">61539 - First World Problems</ul>
+                            <ul onclick="selectTemplateId('180190441')">180190441 - They're The Same Picture</ul>
+                            <ul onclick="selectTemplateId('61556')">61556 - Grandma Finds The Internet</ul>
+                            <ul onclick="selectTemplateId('6235864')">6235864 - Finding Neverland</ul>
+                            <ul onclick="selectTemplateId('110163934')">110163934 - I Bet He's Thinking About Other
+                                Women</ul>
+                            <ul onclick="selectTemplateId('175540452')">175540452 - Unsettled Tom</ul>
+                            <ul onclick="selectTemplateId('129242436')">129242436 - Change My Mind</ul>
+                            <ul onclick="selectTemplateId('438680')">438680 - Batman Slapping Robin</ul>
+                            <ul onclick="selectTemplateId('217743513')">217743513 - UNO Draw 25 Cards</ul>
+                            <ul onclick="selectTemplateId('91545132')">91545132 - Trump Bill Signing</ul>
+                            <ul onclick="selectTemplateId('84341851')">84341851 - Evil Kermit</ul>
+                            <ul onclick="selectTemplateId('61527')">61527 - Y U No</ul>
+                            <ul onclick="selectTemplateId('3218037')">3218037 - This Is Where I'd Put My Trophy If I Had
+                                One</ul>
+                            <ul onclick="selectTemplateId('61544')">61544 - Success Kid</ul>
+                            <ul onclick="selectTemplateId('563423')">563423 - That Would Be Great</ul>
+                            <ul onclick="selectTemplateId('55311130')">55311130 - This Is Fine</ul>
+                            <ul onclick="selectTemplateId('61546')">61546 - Brace Yourselves X is Coming</ul>
+                            <ul onclick="selectTemplateId('14371066')">14371066 - Star Wars Yoda</ul>
+                            <ul onclick="selectTemplateId('135678846')">135678846 - Who Killed Hannibal</ul>
+                            <ul onclick="selectTemplateId('196652226')">196652226 - Grumpy Cat</ul>
+                            <ul onclick="selectTemplateId('61582')">61582 - Creepy Condescending Wonka</ul>
+                            <ul onclick="selectTemplateId('79132341')">79132341 - Bike Fall</ul>
+                            <ul onclick="selectTemplateId('16464531')">16464531 - But That's None Of My Business</ul>
+                            <ul onclick="selectTemplateId('61533')">61533 - X All The Y</ul>
+                            <ul onclick="selectTemplateId('101511')">101511 - Don't You Squidward</ul>
+                            <ul onclick="selectTemplateId('195515965')">195515965 - Clown Applying Makeup</ul>
+                            <ul onclick="selectTemplateId('1509839')">1509839 - Captain Picard Facepalm</ul>
+                            <ul onclick="selectTemplateId('101287')">101287 - Third World Success Kid</ul>
+                            <ul onclick="selectTemplateId('235589')">235589 - Evil Toddler</ul>
+                            <ul onclick="selectTemplateId('100947')">100947 - Matrix Morpheus</ul>
+                            <ul onclick="selectTemplateId('99683372')">99683372 - Sleeping Shaq</ul>
+                            <ul onclick="selectTemplateId('61516')">61516 - Philosoraptor</ul>
+                            <ul onclick="selectTemplateId('259237855')">259237855 - Laughing Leo</ul>
+                            <ul onclick="selectTemplateId('132769734')">132769734 - Hard To Swallow Pills</ul>
+                            <ul onclick="selectTemplateId('14230520')">14230520 - Black Girl Watv</ul>
+                            <ul onclick="selectTemplateId('245898')">245898 - Picard Wtf</ul>
+                            <ul onclick="selectTemplateId('101910402')">101910402 - Who Would Win?</ul>
+                            <ul onclick="selectTemplateId('922147')">922147 - Laughing Men In Suits</ul>
+                            <ul onclick="selectTemplateId('101440')">101440 - 10 Guy</ul>
+                            <ul onclick="selectTemplateId('61580')">61580 - Too Damn High</ul>
+                            <ul onclick="selectTemplateId('101716')">101716 - Yo Dawg Heard You</ul>
+                            <ul onclick="selectTemplateId('40945639')">40945639 - Dr Evil Laser</ul>
+                            <ul onclick="selectTemplateId('109765')">109765 - I'll Just Wait Here</ul>
+                            <ul onclick="selectTemplateId('259680')">259680 - Am I The Only One Around Here</ul>
+                            <ul onclick="selectTemplateId('9440985')">9440985 - Face You Make Robert Downey Jr</ul>
+                            <ul onclick="selectTemplateId('61581')">61581 - Put It Somewhere Else Patrick</ul>
+                            <ul onclick="selectTemplateId('56225174')">56225174 - Be Like Bill</ul>
+                            <ul onclick="selectTemplateId('163573')">163573 - Imagination Spongebob</ul>
+                            <ul onclick="selectTemplateId('29617627')">29617627 - Look At Me</ul>
+                            <ul onclick="selectTemplateId('12403754')">12403754 - Bad Pun Dog</ul>
+                            <ul onclick="selectTemplateId('460541')">460541 - Jack Sparrow Being Chased</ul>
+                            <ul onclick="selectTemplateId('21604248')">21604248 - Mugatu So Hot Right Now</ul>
+                            <ul onclick="selectTemplateId('195389')">195389 - Sparta Leonidas</ul>
+                            <ul onclick="selectTemplateId('1367068')">1367068 - I Should Buy A Boat Cat</ul>
+                            <ul onclick="selectTemplateId('6531067')">6531067 - See Nobody Cares</ul>
+                            <ul onclick="selectTemplateId('766986')">766986 - Aaaaand Its Gone</ul>
+                            <ul onclick="selectTemplateId('444501')">444501 - Maury Lie Detector</ul>
+                            <ul onclick="selectTemplateId('100955')">100955 - Confession Bear</ul>
+
+
+                            <!-- Add more template IDs as needed -->
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+
+            <input id="topText" placeholder="Top Text">
+            <input id="bottomText" placeholder="Bottom Text">
+            <button class="custom-btn" onclick="generateMemeWithImgflip()">Generate Meme</button>
+
+        </div>
+
+
+
+    </div>
+
+
+
+    <script type="module">
+        async function generateMemeWithImgflip() {
+            console.log("Function triggered");
+            const templateId = document.getElementById("templateId").value || "112126428";
+            const topText = document.getElementById("topText").value;
+            const bottomText = document.getElementById("bottomText").value;
+    
+            try {
+                const response = await fetch("/generate-meme", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ template_id: templateId, text0: topText, text1: bottomText }),
+                });
+    
+                const data = await response.json();
+    
+                if (data.success) {
+                    const memeUrl = data.url;
+                    console.log("Meme generated successfully:", memeUrl);
+                    showMemeModal(memeUrl);
+                } else {
+                    alert("Error generating meme: " + data.error);
+                }
+            } catch (error) {
+                console.error("Error generating meme:", error);
+            }
+        }
+    
+        document.querySelector(".custom-btn").addEventListener("click", generateMemeWithImgflip);
+    </script>
+    
+
+
+    <script>
+        // JavaScript for Slideshow
+        let currentSlideIndex = 0;
+        const slides = document.querySelectorAll(".slide");
+
+        function showSlide(index) {
+            // Ensure the index wraps around using the modulo operator
+            currentSlideIndex = (index + slides.length) % slides.length;
+            slides.forEach((slide, i) => {
+                slide.style.display = i === currentSlideIndex ? "block" : "none";
+            });
+        }
+
+        function changeSlide(direction) {
+            // Adjust the index by direction and then show the appropriate slide
+            currentSlideIndex = (currentSlideIndex + direction + slides.length) % slides.length;
+            showSlide(currentSlideIndex);
+        }
+
+        // Automatically show the first slide
+        showSlide(currentSlideIndex);
+
+        // Optional: Add autoplay functionality (e.g., every 5 seconds)
+        setInterval(() => {
+            changeSlide(1); // Move to the next slide
+        }, 3400); // Adjust the interval as needed (5000ms = 5 seconds)
+
+
+        
+
+        function showMemeModal(imageUrl) {
+            console.log("Displaying meme in modal:", imageUrl);
+
+
+            // Select all existing modals and remove them
+            const existingModals = document.querySelectorAll(".modal");
+            existingModals.forEach((modal) => modal.remove());
+
+            const modal = document.createElement("div");
+            modal.className = "modal";
+            modal.innerHTML = `
+        <span class="modal-close" onclick="closeModal(this)">🐹</span>
+        <img src="${imageUrl}" alt="Generated Meme">
+        <button class="view-gallery-btn" onclick="redirectToGallery()">View in Gallery</button>
+    `;
+            document.body.appendChild(modal);
+            modal.style.display = "flex";
+        }
+        function redirectToGallery() {
+            window.location.href = "gallery.html"; // Ensure this is the correct path to your gallery page
+        }
+
+
+        function closeModal(modalCloseBtn) {
+            const modal = modalCloseBtn.parentElement;
+            modal.style.display = "none";
+            document.body.removeChild(modal);
+            console.log("modalclosed");
+
+        }
+        function downloadMeme(imageUrl) {
+            const link = document.createElement("a");
+            link.href = imageUrl;
+            link.download = "meme.jpg"; // Default file name
+            document.body.appendChild(link); // Append the link for triggering
+            link.click(); // Simulate the click
+            document.body.removeChild(link); // Clean up after download
+            console.log("Download initiated for:", imageUrl);
+        }
+
+
+
+    </script>
+    <!-- <script type="module">
+        import { db } from "./firebase.js";
+        console.log("Firestore Initialized:", db);
+
+        import { collection, addDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+
+        const memeCollection = collection(db, "memes");
+
+        async function generateMemeWithImgflip() {
+            console.log("Function triggered");
+            const templateId = document.getElementById("templateId").value || "112126428";
+
+            const topText = document.getElementById("topText").value;
+
+            const bottomText = document.getElementById("bottomText").value;
+
+            const username = process.env.IMGFLIP_USERNAME;
+            const password = process.env.IMGFLIP_PASSWORD;
+
+            try {
+                console.log("Sending API request to Imgflip...");
+                const response = await fetch("https://api.imgflip.com/caption_image", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: new URLSearchParams({
+                        template_id: templateId,
+                        username: "hornyhamsterofficial",
+                        password: "Cirrus0324!",
+                        text0: topText,
+                        text1: bottomText,
+                        no_watermark: "true" // Add this parameter to remove the watermark
+                    }),
+                });
+
+                // Log the response object
+                console.log("Request body:", response.toString());
+
+                // Check response status
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log("Parsed data:", data);
+
+
+
+                if (data.success) {
+                    const memeUrl = data.data.url;
+                    console.log("Meme generated successfully (no watermark):", memeUrl);
+                    console.log("Meme URL being used for modal:", memeUrl);
+                    // Show modal with the generated meme
+                    showMemeModal(memeUrl);
+
+                    // Push meme URL to Firebase
+                    const docRef = await addDoc(memeCollection, { url: memeUrl });
+                    console.log("Meme successfully added to Firebase:", docRef.id);
+                } else {
+                    alert("Error generating meme: " + data.error_message);
+                }
+            } catch (error) {
+                console.error("Error with Imgflip API:", error);
+            }
+            console.log(templateId);
+            console.log(topText);
+            console.log(bottomText);
+
+        }
+
+
+
+        document.querySelector(".custom-btn").addEventListener("click", generateMemeWithImgflip);
+
+    </script> -->
+
+
+    <!-- Add the JavaScript below -->
+    <script>
+        // Dropdown functionality
+        document.querySelector(".dropdown-toggle").addEventListener("click", function () {
+            const dropdown = document.querySelector(".dropdown");
+            dropdown.classList.toggle("open");
+        });
+
+        function selectTemplateId(templateId) {
+            const inputField = document.getElementById("templateId");
+            inputField.value = templateId;
+
+            // Close the dropdown after selection
+            const dropdown = document.querySelector(".dropdown");
+            dropdown.classList.remove("open");
+        }
+
+        // Close dropdown if user clicks outside
+        document.addEventListener("click", function (event) {
+            const dropdown = document.querySelector(".dropdown");
+            const container = document.querySelector(".dropdown-container");
+            if (!container.contains(event.target)) {
+                dropdown.classList.remove("open");
+            }
+        });
+    </script>
+
+    <script defer src="script.js"></script>
+
+</body>
+
+</html>

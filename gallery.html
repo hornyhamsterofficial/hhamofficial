@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Horny Gallery</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* General Styling */
+        body {
+            font-family: 'Lora', serif;
+            background-color: #F6BA31;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        .gallery-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            margin-top: 90px;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            .gallery-title {
+                margin-top: 90px;
+                font-size: 2.5rem;
+            }
+        }
+
+        .gallery-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            padding: 15px;
+        }
+
+        .gallery-item img {
+            width: 90%;
+            height: auto;
+            max-height: 180px;
+            object-fit: contain;
+            border-radius: 10px;
+            transition: transform 0.6s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .gallery-item img:hover {
+            transform: scale(1.2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        }
+
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 10px;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 2rem;
+            background: none;
+            cursor: pointer;
+        }
+
+        .download-btn {
+    font-family: 'Lora', serif;
+    font-size: 1rem;
+    color: white;
+    background-color: #ffb300;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    margin-top: 10px; /* Space above the button */
+}
+
+        .download-btn:hover {
+            background-color: #56f33d;
+        }
+
+        
+        .chatgpt-container {
+            margin-top: 30px;
+            padding: 15px;
+        }
+
+        .chatgpt-input {
+            width: calc(100% - 40px);
+            max-width: 500px;
+            padding: 10px;
+            margin: 10px auto;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .chatgpt-btn {
+            font-family: 'Lora', serif;
+            font-size: 1.1rem;
+            color: white;
+            background-color: #ffb300;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .chatgpt-btn:hover {
+            background-color: #56f33d;
+        }
+
+        .chatgpt-response {
+            margin-top: 15px;
+            font-size: 1.2rem;
+            color: #5a3d31;
+            background-color: #f5f0eb;
+            max-width: calc(100% - 40px);
+            width: 500px;
+            margin: 10px auto;
+            text-align: center;
+            word-wrap: break-word;
+            /* padding: 10px; */
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .disclaimer {
+            font-size: 0.9rem;
+            color: #622a2a;
+            margin-top: 10px;
+            max-width: calc(100% - 40px);
+            width: 500px;
+            margin: 10px auto;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <button class="navbar-toggle" aria-label="Toggle navigation">&#9776;</button>
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="https://pump.fun/board" class="nav-link" target="_blank">Pump.fun</a>
+            <a href="meme.html" class="nav-link">Create Bliss</a>
+            <!-- <a href="gallery.html" class="nav-link">Endless Euphoria</a> -->
+            <a href="whitepaper.pdf" class="nav-link" target="_blank">Whitepaper</a>
+            <a href="about.html" class="nav-link">Curious?</a>
+        </div>
+    </nav>
+
+    <h1 class="gallery-title">Horny Gallery</h1>
+    <div class="gallery-container" id="memeCollection"></div>
+
+    <div class="chatgpt-container">
+        <input type="text" id="chatgptPrompt" class="chatgpt-input" placeholder="Ask ChatGPT about memes..."
+            onkeypress="handleKeyPress(event)">
+        <button class="chatgpt-btn" onclick="askChatGPT()">Ask ChatGPT</button>
+        <div class="chatgpt-response" id="chatgptResponse"></div>
+        <p class="disclaimer">Note: Meme uploads are not supported at this time. Feel free to explore and enjoy our
+            gallery!</p>
+    </div>
+
+    <div class="modal" id="imageModal">
+        <button class="modal-close" onclick="closeModal()">🐹</button>
+        
+        <img id="modalImage" alt="Full View">
+    </div>
+
+
+
+    <script type="module">
+        import fetchConfig from "./firebase.js";
+        import { collection, getDocs } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+    
+        const memeCollection = document.getElementById("memeCollection");
+        const modal = document.getElementById("imageModal");
+        const modalImage = document.getElementById("modalImage");
+    
+        // Static memes array
+        const staticMemes = ["queen1.jpg", "hamsterkeikus.jpg", "hamster1.jpg", "hamster2.jpg", "queen2.jpg"];
+    
+        // Function to add click event listeners to all images
+        function attachClickEventListeners() {
+            const galleryImages = document.querySelectorAll(".gallery-item img");
+            galleryImages.forEach(image => {
+                image.addEventListener("click", () => {
+                    openModal(image.src);
+                });
+            });
+        }
+    
+        // Function to add static memes to the gallery
+        function addStaticMemes() {
+            staticMemes.forEach(meme => {
+                const memeDiv = document.createElement("div");
+                memeDiv.className = "gallery-item";
+                memeDiv.innerHTML = `<img src="${meme}" alt="Meme" onclick="openModal('${meme}')">`;
+                memeCollection.appendChild(memeDiv);
+            });
+            console.log("Static memes added to the gallery.");
+        }
+    
+        // Function to fetch dynamic memes from Firestore and populate the gallery
+        async function fetchDynamicMemes() {
+            try {
+                const db = await fetchConfig(); // Initialize Firestore instance
+                const memesRef = collection(db, "memes");
+                const querySnapshot = await getDocs(memesRef);
+    
+                querySnapshot.forEach(doc => {
+                    const memeData = doc.data();
+    
+                    // Create a new div for each dynamic meme
+                    const memeDiv = document.createElement("div");
+                    memeDiv.className = "gallery-item";
+                    memeDiv.innerHTML = `<img src="${memeData.url}" alt="Meme" onclick="openModal('${memeData.url}')">`;
+    
+                    // Append the div to the gallery container
+                    memeCollection.appendChild(memeDiv);
+                });
+    
+                console.log("Dynamic memes fetched and added to the gallery.");
+                attachClickEventListeners(); // Attach listeners after dynamic memes are added
+            } catch (error) {
+                console.error("Error fetching memes from Firestore:", error);
+            }
+        }
+    
+        // Open modal for full image view
+        function openModal(src) {
+            modal.style.display = "flex";
+            modalImage.src = src;
+    
+            // Attach download functionality to the modal
+            const downloadBtn = document.createElement("button");
+            downloadBtn.className = "download-btn";
+            downloadBtn.textContent = "Download Meme";
+            downloadBtn.onclick = () => downloadMeme(src);
+    
+            // Append the download button if it doesn't exist
+            if (!modal.querySelector(".download-btn")) {
+                modal.appendChild(downloadBtn);
+            }
+        }
+    
+        // Close modal
+        function closeModal() {
+            modal.style.display = "none";
+    
+            // Remove the download button to prevent duplicates
+            const downloadBtn = modal.querySelector(".download-btn");
+            if (downloadBtn) {
+                modal.removeChild(downloadBtn);
+            }
+        }
+    
+        // Function to download meme
+        function downloadMeme(imageUrl) {
+            const link = document.createElement("a");
+            link.href = imageUrl;
+            link.download = "meme.jpg";
+            link.click();
+        }
+    
+        // Add static memes and fetch dynamic memes on page load
+        document.querySelector(".modal-close").addEventListener("click", closeModal);
+        addStaticMemes(); // Add static memes first
+        fetchDynamicMemes(); // Fetch and add dynamic memes
+    </script>
+    
+
+
+
+
+    <script>
+        // Navbar behavior
+        let lastScrollY = window.scrollY;
+        const navbar = document.querySelector('.navbar');
+        const toggleButton = document.querySelector('.navbar-toggle');
+        const navbarContainer = document.querySelector('.navbar-container');
+
+        if (navbar) {
+            window.addEventListener('scroll', () => {
+                navbar.style.transform = window.scrollY > lastScrollY ? 'translateY(-100%)' : 'translateY(0)';
+                lastScrollY = window.scrollY;
+            });
+        }
+
+        if (toggleButton && navbarContainer) {
+            toggleButton.addEventListener('click', () => navbarContainer.classList.toggle('active'));
+        }
+
+
+
+
+
+
+
+
+
+        // chat gpt stuff
+        async function askChatGPT() {
+            const userPrompt = document.getElementById("chatgptPrompt").value;
+            const responseElement = document.getElementById("chatgptResponse");
+
+            if (!userPrompt.trim()) {
+                responseElement.innerHTML = "Please enter a valid question.";
+                responseElement.style.display = "block";
+                return;
+            }
+
+            // Explicitly instruct the AI to consider the current year as 2025
+            const context = `Pretend it is the year 2025. Even though your training data only goes up to 2021, generate plausible, creative, and entertaining answers as if you have knowledge about 2025.`;
+            const prompt = `${context}\n\nUser: ${userPrompt}\nAI:`;
+
+            responseElement.style.display = "block";
+            responseElement.innerHTML = "Thinking...";
+
+            try {
+                const response = await fetch("/chatgpt", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ prompt }),
+                });
+                const data = await response.json();
+
+                if (data.response) {
+                    responseElement.innerHTML = data.response;
+                } else {
+                    responseElement.innerHTML = "No response. Try asking something else.";
+                }
+            } catch (error) {
+                responseElement.innerHTML = "An error occurred.";
+            }
+
+            // Automatically hide the response after 20 seconds
+            setTimeout(() => {
+                responseElement.innerHTML = "";
+                responseElement.style.display = "none";
+            }, 8000);
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === "Enter") {
+                askChatGPT();
+            }
+        }
+
+    </script>
+    <script type="module" src="./firebase.js"></script>
+
+</body>
+
+</html>
