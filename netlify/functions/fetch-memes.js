@@ -1,5 +1,6 @@
-import { getFirestore, collection, getDocs } from "firebase/firestore";
 import { initializeApp } from "firebase/app";
+import { getFirestore, collection, getDocs } from "firebase/firestore";
+
 
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,
@@ -17,7 +18,9 @@ export const handler = async () => {
   try {
     const memesRef = collection(db, "memes");
     const querySnapshot = await getDocs(memesRef);
-    const memes = querySnapshot.docs.map((doc) => doc.data());
+    const memes = [];
+    
+    querySnapshot.forEach((doc) => memes.push(doc.data()));
 
     return {
       statusCode: 200,
