@@ -9,6 +9,19 @@ const modal = document.getElementById("imageModal");
 const modalImage = document.getElementById("modalImage");
 
 
+
+// Toggle Navbar Links for Mobile
+const toggleButton = document.querySelector(".navbar-toggle");
+const navbarContainer = document.querySelector(".navbar-container");
+
+if (toggleButton && navbarContainer) {
+    toggleButton.addEventListener("click", () => {
+        navbarContainer.classList.toggle("active"); // Toggle the active class
+    });
+} else {
+    console.error("Navbar toggle or container not found.");
+} 
+
 // Static Memes Array
 const staticMemes = [
     "/images/queen1.jpg",
