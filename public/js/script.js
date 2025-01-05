@@ -53,16 +53,15 @@ async function generateMemeWithImgflip() {
     const topText = document.getElementById("topText").value.trim();
     const bottomText = document.getElementById("bottomText").value.trim();
 
-    console.log("Template ID before:", templateId);
-    console.log("Top Text before:", topText);
-    console.log("Bottom Text before:", bottomText);
+    console.log("trying to create meme before", templateId);
+    
 
 
     if (!topText || !bottomText) {
         alert("Please enter both top and bottom text.");
         return;
     }
-
+    console.log("Creating meme with:", { templateId, topText, bottomText });
     try {
         const response = await fetch(generateMemeEndpoint, {
             method: "POST",
@@ -74,9 +73,9 @@ async function generateMemeWithImgflip() {
         console.log("Top Text:", topText);
         console.log("Bottom Text:", bottomText);
 
-        if (!response.ok) {
-            throw new Error(`Failed to create meme: ${response.statusText}`);
-        }
+        // if (!response.ok) {
+        //     throw new Error(`Failed to create meme: ${response.statusText}`);
+        // }
 
         const data = await response.json();
         if (data.success) {

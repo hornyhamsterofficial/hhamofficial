@@ -25,6 +25,11 @@ export const handler = async (event) => {
                 password: process.env.IMGFLIP_PASSWORD,
                 text0,
                 text1,
+                boxes: JSON.stringify([
+                  { text: text0 },
+                  { text: text1 }
+              ]),
+              no_watermark: true,
             }),
         });
 
