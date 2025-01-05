@@ -8,7 +8,7 @@
 
     <!-- <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400;1,700&family=Playfair+Display:wght@400;700;1,400&display=swap" rel="stylesheet"> -->
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/stylesheets/style.css">
     <style>
         /* General Styling */
         body {
@@ -350,11 +350,11 @@
     <nav class="navbar">
         <div class="navbar-container">
             <button class="navbar-toggle" aria-label="Toggle navigation">&#9776;</button>
-            <a href="index.html" class="nav-link">Home</a>
+            <a href="/html/index.html" class="nav-link">Home</a>
             <a href="https://pump.fun/board" class="nav-link" target="_blank">Pump.fun</a>
-            <a href="gallery.html" class="nav-link">Endless Euphoria</a>
-            <a href="whitepaper.pdf" class="nav-link" target="_blank">Whitepaper</a>
-            <a href="about.html" class="nav-link">Curious?</a>
+            <a href="/html/gallery.html" class="nav-link">Endless Euphoria</a>
+            <a href="/docs/whitepaper.pdf" class="nav-link" target="_blank">Whitepaper</a>
+            <a href="/html/about.html" class="nav-link">Curious?</a>
         </div>
     </nav>
 
@@ -365,46 +365,46 @@
         <!-- Slideshow -->
         <div class="slideshow-container">
             <div class="slide">
-                <img src="queen1.jpg" alt="Meme 1">
+                <img src="/images/queen1.jpg" alt="Meme 1">
             </div>
             <div class="slide">
-                <img src="hamsterkeikus.jpg" alt="Meme 2">
+                <img src="/images/hamsterkeikus.jpg" alt="Meme 2">
             </div>
             <div class="slide">
-                <img src="hamster1.jpg" alt="Meme 3">
+                <img src="/images/hamster1.jpg" alt="Meme 3">
             </div>
             <div class="slide">
-                <img src="hamster2.jpg" alt="Meme 4">
+                <img src="/images/hamster2.jpg" alt="Meme 4">
             </div>
             <div class="slide">
-                <img src="queen2.jpg" alt="Meme 5">
+                <img src="/images/queen2.jpg" alt="Meme 5">
             </div>
             <div class="slide">
-                <img src="art1.jpg" alt="Meme 6">
+                <img src="/images/art1.jpg" alt="Meme 6">
             </div>
             <div class="slide">
-                <img src="art2.jpg" alt="Meme 7">
+                <img src="/images/art2.jpg" alt="Meme 7">
             </div>
             <div class="slide">
-                <img src="art3.jpg" alt="Meme 8">
+                <img src="/images/art3.jpg" alt="Meme 8">
             </div>
             <div class="slide">
-                <img src="art4.jpg" alt="Meme 9">
+                <img src="/images/art4.jpg" alt="Meme 9">
             </div>
             <div class="slide">
-                <img src="pose2.jpg" alt="Meme 10">
+                <img src="/images/pose2.jpg" alt="Meme 10">
             </div>
             <div class="slide">
-                <img src="vogue.jpg" alt="Meme 11">
+                <img src="/images/vogue.jpg" alt="Meme 11">
             </div>
             <div class="slide">
-                <img src="vogue2.jpg" alt="Meme 12">
+                <img src="/images/vogue2.jpg" alt="Meme 12">
             </div>
             <div class="slide">
-                <img src="cpu.jpg" alt="Meme 13">
+                <img src="/images/cpu.jpg" alt="Meme 13">
             </div>
             <div class="slide">
-                <img src="pose.jpg" alt="Meme 14">
+                <img src="/images/pose.jpg" alt="Meme 14">
             </div>
 
             <button class="prev" onclick="changeSlide(-1)">&#10094;</button>
@@ -643,7 +643,7 @@
         function downloadMeme(imageUrl) {
             const link = document.createElement("a");
             link.href = imageUrl;
-            link.download = "meme.jpg"; // Default file name
+            link.download = "HHAMmeme.jpg"; // Default file name
             document.body.appendChild(link); // Append the link for triggering
             link.click(); // Simulate the click
             document.body.removeChild(link); // Clean up after download
@@ -653,81 +653,6 @@
 
 
     </script>
-    <!-- <script type="module">
-        import { db } from "./firebase.js";
-        console.log("Firestore Initialized:", db);
-
-        import { collection, addDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
-
-        const memeCollection = collection(db, "memes");
-
-        async function generateMemeWithImgflip() {
-            console.log("Function triggered");
-            const templateId = document.getElementById("templateId").value || "112126428";
-
-            const topText = document.getElementById("topText").value;
-
-            const bottomText = document.getElementById("bottomText").value;
-
-            const username = process.env.IMGFLIP_USERNAME;
-            const password = process.env.IMGFLIP_PASSWORD;
-
-            try {
-                console.log("Sending API request to Imgflip...");
-                const response = await fetch("https://api.imgflip.com/caption_image", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                    body: new URLSearchParams({
-                        template_id: templateId,
-                        username: "hornyhamsterofficial",
-                        password: "Cirrus0324!",
-                        text0: topText,
-                        text1: bottomText,
-                        no_watermark: "true" // Add this parameter to remove the watermark
-                    }),
-                });
-
-                // Log the response object
-                console.log("Request body:", response.toString());
-
-                // Check response status
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-
-                const data = await response.json();
-                console.log("Parsed data:", data);
-
-
-
-                if (data.success) {
-                    const memeUrl = data.data.url;
-                    console.log("Meme generated successfully (no watermark):", memeUrl);
-                    console.log("Meme URL being used for modal:", memeUrl);
-                    // Show modal with the generated meme
-                    showMemeModal(memeUrl);
-
-                    // Push meme URL to Firebase
-                    const docRef = await addDoc(memeCollection, { url: memeUrl });
-                    console.log("Meme successfully added to Firebase:", docRef.id);
-                } else {
-                    alert("Error generating meme: " + data.error_message);
-                }
-            } catch (error) {
-                console.error("Error with Imgflip API:", error);
-            }
-            console.log(templateId);
-            console.log(topText);
-            console.log(bottomText);
-
-        }
-
-
-
-        document.querySelector(".custom-btn").addEventListener("click", generateMemeWithImgflip);
-
-    </script> -->
-
 
     <!-- Add the JavaScript below -->
     <script>
@@ -756,7 +681,7 @@
         });
     </script>
 
-    <script defer src="script.js"></script>
+    <script defer src="/js/script.js"></script>
 
 </body>
 

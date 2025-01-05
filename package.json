@@ -10,6 +10,7 @@
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "firebase": "^11.1.0",
+    "firebase-admin": "^13.0.2",
     "node-fetch": "^2.7.0",
     "path": "^0.12.7",
     "punycode": "^2.3.1"
