@@ -10,28 +10,59 @@ const modalImage = document.getElementById("modalImage");
 
 // Generate Meme
 async function generateMemeWithImgflip() {
-  const templateId = document.getElementById("templateId").value || "181913649";
-  const topText = document.getElementById("topText").value;
-  const bottomText = document.getElementById("bottomText").value;
+    const templateId = document.getElementById("templateId").value || "181913649";
+    const topText = document.getElementById("topText").value.trim();
+    const bottomText = document.getElementById("bottomText").value.trim();
 
-  try {
-    const response = await fetch(generateMemeEndpoint, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ template_id: templateId, text0: topText, text1: bottomText }),
-    });
-
-    const data = await response.json();
-
-    if (data.success) {
-      showMemeModal(data.url);
-    } else {
-      alert(`Error generating meme: ${data.error}`);
+    if (!topText || !bottomText) {
+        alert("Please enter both top and bottom text.");
+        return;
     }
-  } catch (error) {
-    console.error("Error generating meme:", error);
-  }
+
+    try {
+        const response = await fetch("/.netlify/functions/generate-meme", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ template_id: templateId, text0: topText, text1: bottomText }),
+        });
+
+        const data = await response.json();
+        if (data.success) {
+            alert(`Meme created! URL: ${data.url}`);
+        } else {
+            alert(`Error creating meme: ${data.error}`);
+        }
+    } catch (error) {
+        console.error("Error creating meme:", error);
+        alert("An error occurred while creating the meme.");
+    }
 }
+
+
+// Static Memes Array
+const staticMemes = [
+    "/images/queen1.jpg",
+    "/images/hamsterkeikus.jpg",
+    "/images/hamster1.jpg",
+    "/images/hamster2.jpg",
+    "/images/queen2.jpg"
+];
+
+// Add Static Memes to Gallery
+function addStaticMemesToGallery() {
+    if (memeCollection) {
+        staticMemes.forEach((meme) => {
+            const memeDiv = document.createElement("div");
+            memeDiv.className = "gallery-item";
+            memeDiv.innerHTML = `<img src="${meme}" alt="Static Meme">`;
+            memeCollection.appendChild(memeDiv);
+        });
+        console.log("Static memes added to gallery.");
+    }
+}
+
+
+
 
 // Populate Gallery
 async function fetchDynamicMemes() {
@@ -63,21 +94,39 @@ function closeModal() {
 
 // ChatGPT Integration
 async function askChatGPT() {
-  const prompt = document.getElementById("chatgptPrompt").value;
+    const userPrompt = document.getElementById("chatgptPrompt").value.trim();
+    const responseElement = document.getElementById("chatgptResponse");
 
-  try {
-    const response = await fetch(chatGPTEndpoint, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt }),
-    });
+    if (!userPrompt) {
+        responseElement.innerHTML = "Please enter a valid question.";
+        responseElement.style.display = "block";
+        return;
+    }
 
-    const data = await response.json();
-    document.getElementById("chatgptResponse").innerText = data.response || "No response received.";
-  } catch (error) {
-    console.error("Error communicating with ChatGPT:", error);
-  }
+    try {
+        const response = await fetch("/.netlify/functions/chatgpt", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ prompt: userPrompt }),
+        });
+        const data = await response.json();
+        responseElement.innerHTML = data.response || "No response received.";
+    } catch (error) {
+        responseElement.innerHTML = "An error occurred. Please try again later.";
+        console.error("ChatGPT error:", error);
+    }
+
+    setTimeout(() => {
+        responseElement.style.display = "none";
+    }, 5000);
 }
+
+function handleKeyPress(event) {
+    if (event.key === "Enter") {
+        askChatGPT();
+    }
+}
+
 
 // Event Listeners
 document.querySelector(".custom-btn")?.addEventListener("click", generateMemeWithImgflip);
@@ -86,3 +135,7 @@ document.querySelector(".modal-close")?.addEventListener("click", closeModal);
 
 // Fetch memes on gallery page
 if (window.location.pathname.includes("gallery")) fetchDynamicMemes();
+if (memeCollection) {
+    addStaticMemesToGallery();
+    fetchDynamicMemes();
+}
