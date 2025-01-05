@@ -76,6 +76,10 @@ async function generateMemeWithImgflip() {
             body: JSON.stringify({ template_id: templateId, text0: topText, text1: bottomText }),
         });
 
+        if (!response.ok) {
+            throw new Error(`Failed to create meme: ${response.statusText}`);
+        }
+
         const data = await response.json();
         if (data.success) {
             alert(`Meme created! URL: ${data.url}`);
@@ -140,6 +144,9 @@ async function askChatGPT() {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ prompt: userPrompt }),
         });
+        if (!response.ok) {
+            throw new Error(`Failed to fetch response: ${response.statusText}`);
+        }
         const data = await response.json();
         responseElement.innerHTML = data.response || "No response received.";
     } catch (error) {
@@ -147,6 +154,7 @@ async function askChatGPT() {
         console.error("ChatGPT error:", error);
     }
 
+    responseElement.style.display = "block";
     setTimeout(() => {
         responseElement.style.display = "none";
     }, 5000);
@@ -163,6 +171,7 @@ function handleKeyPress(event) {
 document.querySelector(".custom-btn")?.addEventListener("click", generateMemeWithImgflip);
 document.querySelector(".chatgpt-btn")?.addEventListener("click", askChatGPT);
 document.querySelector(".modal-close")?.addEventListener("click", closeModal);
+document.getElementById("chatgptPrompt")?.addEventListener("keypress", handleKeyPress);
 
 // Fetch memes on gallery page
 // if (window.location.pathname.includes("gallery")) fetchDynamicMemes();

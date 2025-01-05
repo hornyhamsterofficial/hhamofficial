@@ -18,8 +18,8 @@ export const handler = async (event) => {
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
             body: new URLSearchParams({
                 template_id,
-                username: process.env.IMGFLIP_USERNAME,
-                password: process.env.IMGFLIP_PASSWORD,
+                username: "hornyhamsterofficial",
+                password: "Cirrus0324!",
                 text0,
                 text1,
             }),
