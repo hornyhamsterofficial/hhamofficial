@@ -2,7 +2,7 @@ import fetch from "node-fetch";
 
 export const handler = async (event) => {
     try {
-        const { template_id, text0, text1 } = JSON.parse(event.body || "{}");
+        const { template_id, text0, text1, no_watermark = true } = JSON.parse(event.body || "{}");
 
         // Validate required parameters
         if (!template_id || !text0 || !text1) {
@@ -14,6 +14,22 @@ export const handler = async (event) => {
 
          // Debug the inputs being sent to Imgflip API
          console.log("Sending to Imgflip:", { template_id, text0, text1 });
+
+        //debug code
+         const username = process.env.IMGFLIP_USERNAME;
+        const password = process.env.IMGFLIP_PASSWORD;
+
+        // Log environment variables to confirm they are set
+        console.log("Imgflip credentials:", { username, password });
+
+        if (!username || !password) {
+            return {
+                statusCode: 500,
+                body: JSON.stringify({ error: "Imgflip credentials are not set in environment variables." }),
+            };
+        }
+
+
 
         // Make a request to the Imgflip API
         const response = await fetch("https://api.imgflip.com/caption_image", {

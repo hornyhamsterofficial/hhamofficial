@@ -66,7 +66,7 @@ async function generateMemeWithImgflip() {
         const response = await fetch(generateMemeEndpoint, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ template_id: templateId, text0: topText, text1: bottomText }),
+            body: JSON.stringify({ template_id: templateId, text0: topText, text1: bottomText, no_watermark: true }),
         });
 
         console.log("Template ID:", templateId);
@@ -192,6 +192,107 @@ function handleKeyPress(event) {
         askChatGPT();
     }
 }
+
+
+        // JavaScript for Slideshow
+        let currentSlideIndex = 0;
+        const slides = document.querySelectorAll(".slide");
+
+        function showSlide(index) {
+            // Ensure the index wraps around using the modulo operator
+            currentSlideIndex = (index + slides.length) % slides.length;
+            slides.forEach((slide, i) => {
+                slide.style.display = i === currentSlideIndex ? "block" : "none";
+            });
+        }
+
+        function changeSlide(direction) {
+            // Adjust the index by direction and then show the appropriate slide
+            currentSlideIndex = (currentSlideIndex + direction + slides.length) % slides.length;
+            showSlide(currentSlideIndex);
+        }
+
+        // Automatically show the first slide
+        showSlide(currentSlideIndex);
+
+        // Optional: Add autoplay functionality (e.g., every 5 seconds)
+        setInterval(() => {
+            changeSlide(1); // Move to the next slide
+        }, 3400); // Adjust the interval as needed (5000ms = 5 seconds)
+
+
+
+
+        function showMemeModal(imageUrl) {
+            console.log("Displaying meme in modal:", imageUrl);
+
+
+            // Select all existing modals and remove them
+            const existingModals = document.querySelectorAll(".modal");
+            existingModals.forEach((modal) => modal.remove());
+
+            const modal = document.createElement("div");
+            modal.className = "modal";
+            modal.innerHTML = `
+        <span class="modal-close" onclick="closeModal(this)">🐹</span>
+        <img src="${imageUrl}" alt="Generated Meme">
+        <button class="view-gallery-btn" onclick="redirectToGallery()">View in Gallery</button>
+    `;
+            document.body.appendChild(modal);
+            modal.style.display = "flex";
+        }
+        function redirectToGallery() {
+            window.location.href = "gallery.html"; // Ensure this is the correct path to your gallery page
+        }
+
+
+        function closeModal(modalCloseBtn) {
+            const modal = modalCloseBtn.parentElement;
+            modal.style.display = "none";
+            document.body.removeChild(modal);
+            console.log("modalclosed");
+
+        }
+        // function downloadMeme(imageUrl) {
+        //     const link = document.createElement("a");
+        //     link.href = imageUrl;
+        //     link.download = "HHAMmeme.jpg"; // Default file name
+        //     document.body.appendChild(link); // Append the link for triggering
+        //     link.click(); // Simulate the click
+        //     document.body.removeChild(link); // Clean up after download
+        //     console.log("Download initiated for:", imageUrl);
+        // }
+
+
+
+        // Dropdown functionality
+        document.querySelector(".dropdown-toggle").addEventListener("click", function () {
+            const dropdown = document.querySelector(".dropdown");
+            dropdown.classList.toggle("open");
+        });
+
+        function selectTemplateId(templateId) {
+            const inputField = document.getElementById("templateId");
+            inputField.value = templateId;
+
+            // Close the dropdown after selection
+            const dropdown = document.querySelector(".dropdown");
+            dropdown.classList.remove("open");
+        }
+
+        // Close dropdown if user clicks outside
+        document.addEventListener("click", function (event) {
+            const dropdown = document.querySelector(".dropdown");
+            const container = document.querySelector(".dropdown-container");
+            if (!container.contains(event.target)) {
+                dropdown.classList.remove("open");
+            }
+        });
+    
+
+
+
+
 
 
 // Event Listeners
