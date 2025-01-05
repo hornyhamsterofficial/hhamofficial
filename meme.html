@@ -555,7 +555,7 @@
             const bottomText = document.getElementById("bottomText").value;
 
             try {
-                const response = await fetch("/generate-meme", {
+                const response = await fetch("/.netlify/functions/generate-meme", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ template_id: templateId, text0: topText, text1: bottomText }),

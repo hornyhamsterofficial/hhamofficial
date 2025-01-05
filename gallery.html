@@ -87,24 +87,25 @@
         }
 
         .download-btn {
-    font-family: 'Lora', serif;
-    font-size: 1rem;
-    color: white;
-    background-color: #ffb300;
-    padding: 10px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    border: none;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-    margin-top: 10px; /* Space above the button */
-}
+            font-family: 'Lora', serif;
+            font-size: 1rem;
+            color: white;
+            background-color: #ffb300;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            margin-top: 10px;
+            /* Space above the button */
+        }
 
         .download-btn:hover {
             background-color: #56f33d;
         }
 
-        
+
         .chatgpt-container {
             margin-top: 30px;
             padding: 15px;
@@ -190,23 +191,23 @@
 
     <div class="modal" id="imageModal">
         <button class="modal-close" onclick="closeModal()">🐹</button>
-        
+
         <img id="modalImage" alt="Full View">
     </div>
 
 
 
     <script type="module">
-        import fetchConfig from "./firebase.js";
-        import { collection, getDocs } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
-    
+        // import fetchConfig from "./firebase.js";
+        // import { collection, getDocs } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+
         const memeCollection = document.getElementById("memeCollection");
         const modal = document.getElementById("imageModal");
         const modalImage = document.getElementById("modalImage");
-    
+
         // Static memes array
         const staticMemes = ["queen1.jpg", "hamsterkeikus.jpg", "hamster1.jpg", "hamster2.jpg", "queen2.jpg"];
-    
+
         // Function to add click event listeners to all images
         function attachClickEventListeners() {
             const galleryImages = document.querySelectorAll(".gallery-item img");
@@ -216,7 +217,7 @@
                 });
             });
         }
-    
+
         // Function to add static memes to the gallery
         function addStaticMemes() {
             staticMemes.forEach(meme => {
@@ -227,97 +228,102 @@
             });
             console.log("Static memes added to the gallery.");
         }
-    
+
         // Function to fetch dynamic memes from Firestore and populate the gallery
-        async function fetchDynamicMemes() {
-            try {
-                const db = await fetchConfig(); // Initialize Firestore instance
-                const memesRef = collection(db, "memes");
-                const querySnapshot = await getDocs(memesRef);
-    
-                querySnapshot.forEach(doc => {
-                    const memeData = doc.data();
-    
-                    // Create a new div for each dynamic meme
-                    const memeDiv = document.createElement("div");
-                    memeDiv.className = "gallery-item";
-                    memeDiv.innerHTML = `<img src="${memeData.url}" alt="Meme" onclick="openModal('${memeData.url}')">`;
-    
-                    // Append the div to the gallery container
-                    memeCollection.appendChild(memeDiv);
-                });
-    
-                console.log("Dynamic memes fetched and added to the gallery.");
-                attachClickEventListeners(); // Attach listeners after dynamic memes are added
-            } catch (error) {
-                console.error("Error fetching memes from Firestore:", error);
+        // Function to fetch dynamic memes from Netlify Function
+    async function fetchDynamicMemes() {
+        try {
+            const response = await fetch("/.netlify/functions/get-memes", {
+                method: "GET",
+            });
+
+            if (!response.ok) {
+                throw new Error(`Failed to fetch memes: ${response.statusText}`);
             }
+
+            const memes = await response.json();
+
+            memes.forEach((memeData) => {
+                const memeDiv = document.createElement("div");
+                memeDiv.className = "gallery-item";
+                memeDiv.innerHTML = `<img src="${memeData.url}" alt="Meme" onclick="openModal('${memeData.url}')">`;
+
+                memeCollection.appendChild(memeDiv);
+            });
+
+            console.log("Dynamic memes fetched and added to the gallery.");
+            attachClickEventListeners(); // Attach listeners after dynamic memes are added
+        } catch (error) {
+            console.error("Error fetching memes from Netlify Function:", error);
         }
-    
+    }
+
         // Open modal for full image view
         function openModal(src) {
             modal.style.display = "flex";
             modalImage.src = src;
-    
+
             // Attach download functionality to the modal
             const downloadBtn = document.createElement("button");
             downloadBtn.className = "download-btn";
             downloadBtn.textContent = "Download Meme";
             downloadBtn.onclick = () => downloadMeme(src);
-    
+
             // Append the download button if it doesn't exist
             if (!modal.querySelector(".download-btn")) {
                 modal.appendChild(downloadBtn);
             }
         }
-    
+
         // Close modal
         function closeModal() {
             modal.style.display = "none";
-    
+
             // Remove the download button to prevent duplicates
             const downloadBtn = modal.querySelector(".download-btn");
             if (downloadBtn) {
                 modal.removeChild(downloadBtn);
             }
         }
-    
+
         // Function to download meme
         async function downloadMeme(imageUrl) {
-    try {
-        // Fetch the image as a blob
-        const response = await fetch(imageUrl, { mode: 'cors' }); // Ensure CORS is allowed for cross-origin images
-        if (!response.ok) throw new Error(`Failed to fetch image: ${response.statusText}`);
-        
-        const blob = await response.blob();
+            try {
+                // Fetch the image as a blob
+                const response = await fetch(imageUrl, { mode: 'cors' }); // Ensure CORS is allowed for cross-origin images
+                if (!response.ok) throw new Error(`Failed to fetch image: ${response.statusText}`);
 
-        // Create a temporary download link
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
-        link.download = `meme_${Date.now()}.jpg`; // Dynamically name the file with a timestamp
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link); // Clean up
+                const blob = await response.blob();
 
-        console.log(`Meme downloaded successfully from: ${imageUrl}`);
-    } catch (error) {
-        console.error("Error downloading meme:", error);
-        alert("Failed to download meme. Please try again.");
-    }
-}
+                // Create a temporary download link
+                const link = document.createElement("a");
+                link.href = URL.createObjectURL(blob);
+                link.download = `meme_${Date.now()}.jpg`; // Dynamically name the file with a timestamp
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link); // Clean up
+
+                console.log(`Meme downloaded successfully from: ${imageUrl}`);
+            } catch (error) {
+                console.error("Error downloading meme:", error);
+                alert("Failed to download meme. Please try again.");
+            }
+        }
 
         // Add static memes and fetch dynamic memes on page load
         document.querySelector(".modal-close").addEventListener("click", closeModal);
         addStaticMemes(); // Add static memes first
         fetchDynamicMemes(); // Fetch and add dynamic memes
     </script>
-    
+
 
 
 
 
     <script>
         // Navbar behavior
+        //////////////////
+        /////////////////
         let lastScrollY = window.scrollY;
         const navbar = document.querySelector('.navbar');
         const toggleButton = document.querySelector('.navbar-toggle');
@@ -333,12 +339,6 @@
         if (toggleButton && navbarContainer) {
             toggleButton.addEventListener('click', () => navbarContainer.classList.toggle('active'));
         }
-
-
-
-
-
-
 
 
 
@@ -361,7 +361,7 @@
             responseElement.innerHTML = "Thinking...";
 
             try {
-                const response = await fetch("/chatgpt", {
+                const response = await fetch("/.netlify/functions/chatgpt", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ prompt }),
@@ -384,6 +384,13 @@
             }, 8000);
         }
 
+        
+        
+        
+        
+        
+        
+        
         function handleKeyPress(event) {
             if (event.key === "Enter") {
                 askChatGPT();
@@ -391,7 +398,7 @@
         }
 
     </script>
-    <script type="module" src="./firebase.js"></script>
+    <!-- <script type="module" src="./firebase.js"></script> -->
 
 </body>
 
