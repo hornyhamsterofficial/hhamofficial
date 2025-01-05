@@ -1,11 +1,21 @@
-const path = require("path");
-const cors = require("cors");
-require("dotenv").config();
-const express = require("express");
-const bodyParser = require("body-parser");
-const fetch = require("node-fetch");
-const { initializeApp } = require("firebase/app");
-const { getFirestore, collection, getDocs, addDoc } = require("firebase/firestore");
+import path from "path";
+import { fileURLToPath } from "url";
+import cors from "cors";
+import dotenv from "dotenv";
+import express from "express";
+import bodyParser from "body-parser";
+import { writeFileSync } from "fs";
+import fetch from "node-fetch";
+
+import { initializeApp } from "firebase/app";
+import { getFirestore, collection, getDocs, addDoc } from "firebase/firestore";
+
+
+dotenv.config();
+
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 
@@ -14,8 +24,7 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "../public"))); // Serve files from "public"
 
-// Define PORT
-const PORT = process.env.PORT || 3000;
+
 
 // Firebase initialization
 const firebaseConfig = {
@@ -79,7 +88,7 @@ app.post("/chatgpt", async (req, res) => {
         const data = await response.json();
 
         if (data.choices && data.choices.length > 0) {
-            res.json({ response: data.choices[0].message.content.trim() });
+            res.json({ response: data.choices[0].message.content.trim() || "No response." });
         } else {
             console.error("Unexpected API response:", data);
             res.status(500).json({
@@ -162,10 +171,12 @@ app.get("/download", async (req, res) => {
             throw new Error("Failed to fetch image.");
         }
 
-        const contentType = response.headers.get("content-type");
-        res.setHeader("Content-Type", contentType);
-        res.setHeader("Content-Disposition", `attachment; filename="${path.basename(url)}"`);
-        response.body.pipe(res);
+        const buffer = await response.arrayBuffer();
+        const filename = path.basename(url);
+
+        res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
+        res.setHeader("Content-Type", "application/octet-stream");
+        res.send(buffer);
     } catch (error) {
         console.error("Error downloading image:", error);
         res.status(500).send("Failed to download image.");
@@ -173,6 +184,9 @@ app.get("/download", async (req, res) => {
 });
 
 // Start server
+// Define PORT
+const PORT = process.env.PORT || 3000;
+
 app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
 });
