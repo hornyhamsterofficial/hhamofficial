@@ -47,50 +47,6 @@ function addStaticMemesToGallery() {
     }
 }
 
-// Generate Meme
-async function generateMemeWithImgflip() {
-    const templateId = document.getElementById("templateId").value || "181913649";
-    const topText = document.getElementById("topText").value.trim();
-    const bottomText = document.getElementById("bottomText").value.trim();
-
-    console.log("trying to create meme before", templateId);
-    
-
-
-    if (!topText || !bottomText) {
-        alert("Please enter both top and bottom text.");
-        return;
-    }
-    console.log("Creating meme with:", { templateId, topText, bottomText });
-    try {
-        const response = await fetch(generateMemeEndpoint, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ template_id: templateId, text0: topText, text1: bottomText, no_watermark: true }),
-        });
-
-        console.log("Template ID:", templateId);
-        console.log("Top Text:", topText);
-        console.log("Bottom Text:", bottomText);
-
-        // if (!response.ok) {
-        //     throw new Error(`Failed to create meme: ${response.statusText}`);
-        // }
-
-        const data = await response.json();
-        if (data.success) {
-            alert(`Meme created! URL: ${data.url}`);
-            showMemeModal(data.url); // Show the generated meme in a modal
-        } else {
-            alert(`Error creating meme: ${data.error}`);
-        }
-    } catch (error) {
-        console.error("Error creating meme:", error);
-        alert("An error occurred while creating the meme.");
-    }
-}
-
-
 
 // Populate Gallery
 async function fetchDynamicMemes() {
@@ -112,7 +68,6 @@ async function fetchDynamicMemes() {
     }
 }
 
-
 // Show Modal
 function showMemeModal(imageUrl) {
     modalImage.src = imageUrl;
@@ -128,6 +83,7 @@ function showMemeModal(imageUrl) {
     modal.querySelector(".download-btn")?.remove();
     modal.appendChild(downloadBtn);
 }
+
 
 // Close Modal
 function closeModal() {
@@ -151,8 +107,6 @@ async function downloadMeme(imageUrl) {
         console.error("Error downloading meme:", error);
     }
 }
-
-
 
 // ChatGPT Integration
 async function askChatGPT() {
@@ -187,9 +141,52 @@ async function askChatGPT() {
     }, 5000);
 }
 
+//handle enter
+
 function handleKeyPress(event) {
     if (event.key === "Enter") {
         askChatGPT();
+    }
+}
+
+// Generate Meme
+async function generateMemeWithImgflip() {
+    const templateId = document.getElementById("templateId").value || "181913649";
+    const topText = document.getElementById("topText").value.trim();
+    const bottomText = document.getElementById("bottomText").value.trim();
+
+    console.log("trying to create meme before", templateId);
+
+    if (!topText || !bottomText) {
+        alert("Please enter both top and bottom text.");
+        return;
+    }
+    console.log("Creating meme with:", { templateId, topText, bottomText });
+    try {
+        const response = await fetch(generateMemeEndpoint, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ template_id: templateId, text0: topText, text1: bottomText, no_watermark: true }),
+        });
+
+        console.log("Template ID:", templateId);
+        console.log("Top Text:", topText);
+        console.log("Bottom Text:", bottomText);
+
+        // if (!response.ok) {
+        //     throw new Error(`Failed to create meme: ${response.statusText}`);
+        // }
+
+        const data = await response.json();
+        if (data.success) {
+            alert(`Meme created! URL: ${data.url}`);
+            showMemeModal(data.url); // Show the generated meme in a modal
+        } else {
+            alert(`Error creating meme: ${data.error}`);
+        }
+    } catch (error) {
+        console.error("Error creating meme:", error);
+        alert("An error occurred while creating the meme.");
     }
 }
 
@@ -291,7 +288,12 @@ function handleKeyPress(event) {
     
 
 
-
+// Fetch memes on gallery page
+// if (window.location.pathname.includes("gallery")) fetchDynamicMemes();
+if (memeCollection) {
+    addStaticMemesToGallery();
+    fetchDynamicMemes();
+}
 
 
 
@@ -301,9 +303,4 @@ document.querySelector(".chatgpt-btn")?.addEventListener("click", askChatGPT);
 document.querySelector(".modal-close")?.addEventListener("click", closeModal);
 document.getElementById("chatgptPrompt")?.addEventListener("keypress", handleKeyPress);
 
-// Fetch memes on gallery page
-// if (window.location.pathname.includes("gallery")) fetchDynamicMemes();
-if (memeCollection) {
-    addStaticMemesToGallery();
-    fetchDynamicMemes();
-}
+
