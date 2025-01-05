@@ -2,12 +2,12 @@ import fetch from "node-fetch";
 
 export const handler = async (event) => {
   try {
-    const { template_id, text0, text1 } = JSON.parse(event.body);
+    const { template_id, text0, text1 } = JSON.parse(event.body || "{}");
 
     if (!template_id || !text0 || !text1) {
       return {
         statusCode: 400,
-        body: JSON.stringify({ error: "Missing required parameters: template_id, text0, or text1." }),
+        body: JSON.stringify({ error: "Missing required parameters." }),
       };
     }
 
@@ -27,8 +27,8 @@ export const handler = async (event) => {
 
     if (!data.success) {
       return {
-        statusCode: 400,
-        body: JSON.stringify({ error: data.error_message || "Failed to generate meme." }),
+        statusCode: 500,
+        body: JSON.stringify({ error: data.error_message || "Meme generation failed." }),
       };
     }
 
@@ -37,9 +37,10 @@ export const handler = async (event) => {
       body: JSON.stringify({ success: true, url: data.data.url }),
     };
   } catch (error) {
+    console.error("Error in generate-meme function:", error);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: error.message || "Internal server error." }),
+      body: JSON.stringify({ error: "Internal Server Error" }),
     };
   }
 };

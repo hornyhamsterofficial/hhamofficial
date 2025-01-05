@@ -1,5 +1,5 @@
-import { initializeApp } from "firebase/app";
 import { getFirestore, collection, getDocs } from "firebase/firestore";
+import { initializeApp } from "firebase/app";
 
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,
@@ -17,18 +17,17 @@ export const handler = async () => {
   try {
     const memesRef = collection(db, "memes");
     const querySnapshot = await getDocs(memesRef);
-
-    const memes = [];
-    querySnapshot.forEach((doc) => memes.push(doc.data()));
+    const memes = querySnapshot.docs.map((doc) => doc.data());
 
     return {
       statusCode: 200,
       body: JSON.stringify({ success: true, memes }),
     };
   } catch (error) {
+    console.error("Error fetching memes:", error);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: "Failed to fetch memes." }),
+      body: JSON.stringify({ success: false, error: "Failed to fetch memes." }),
     };
   }
 };
