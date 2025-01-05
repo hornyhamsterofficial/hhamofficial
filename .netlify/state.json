@@ -1,0 +1,20 @@
+{
+	"geolocation": {
+		"data": {
+			"city": "Claremont",
+			"country": {
+				"code": "US",
+				"name": "United States"
+			},
+			"subdivision": {
+				"code": "CA",
+				"name": "California"
+			},
+			"timezone": "America/Los_Angeles",
+			"latitude": 34.1091,
+			"longitude": -117.7126,
+			"postalCode": "91711"
+		},
+		"timestamp": 1736075245853
+	}
+}
