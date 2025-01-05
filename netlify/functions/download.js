@@ -1,12 +1,12 @@
 import fetch from "node-fetch";
 
 export const handler = async (event) => {
-  const url = event.queryStringParameters.url;
+  const url = event.queryStringParameters?.url;
 
   if (!url) {
     return {
       statusCode: 400,
-      body: "Image URL is required.",
+      body: JSON.stringify({ error: "Image URL is required." }),
     };
   }
 
@@ -29,10 +29,9 @@ export const handler = async (event) => {
       isBase64Encoded: true,
     };
   } catch (error) {
-    console.error("Error downloading image:", error);
     return {
       statusCode: 500,
-      body: "Failed to download image.",
+      body: JSON.stringify({ error: "Failed to download image." }),
     };
   }
 };

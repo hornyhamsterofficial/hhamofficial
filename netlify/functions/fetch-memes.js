@@ -26,10 +26,9 @@ export const handler = async () => {
       body: JSON.stringify({ success: true, memes }),
     };
   } catch (error) {
-    console.error("Error fetching memes:", error);
     return {
       statusCode: 500,
-      body: JSON.stringify({ success: false, error: "Failed to fetch memes." }),
+      body: JSON.stringify({ error: "Failed to fetch memes." }),
     };
   }
 };

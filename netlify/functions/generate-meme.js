@@ -1,16 +1,16 @@
 import fetch from "node-fetch";
 
 export const handler = async (event) => {
-  const { template_id, text0, text1 } = JSON.parse(event.body || "{}");
-
-  if (!template_id || !text0 || !text1) {
-    return {
-      statusCode: 400,
-      body: JSON.stringify({ success: false, error: "Missing required parameters." }),
-    };
-  }
-
   try {
+    const { template_id, text0, text1 } = JSON.parse(event.body);
+
+    if (!template_id || !text0 || !text1) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({ error: "Missing required parameters: template_id, text0, or text1." }),
+      };
+    }
+
     const response = await fetch("https://api.imgflip.com/caption_image", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -26,7 +26,10 @@ export const handler = async (event) => {
     const data = await response.json();
 
     if (!data.success) {
-      throw new Error(data.error_message || "Failed to generate meme.");
+      return {
+        statusCode: 400,
+        body: JSON.stringify({ error: data.error_message || "Failed to generate meme." }),
+      };
     }
 
     return {
@@ -34,11 +37,9 @@ export const handler = async (event) => {
       body: JSON.stringify({ success: true, url: data.data.url }),
     };
   } catch (error) {
-    console.error("Error in generate-meme function:", error);
-
     return {
       statusCode: 500,
-      body: JSON.stringify({ success: false, error: "Internal Server Error" }),
+      body: JSON.stringify({ error: error.message || "Internal server error." }),
     };
   }
 };
