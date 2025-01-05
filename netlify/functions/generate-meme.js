@@ -12,6 +12,9 @@ export const handler = async (event) => {
             };
         }
 
+         // Debug the inputs being sent to Imgflip API
+         console.log("Sending to Imgflip:", { template_id, text0, text1 });
+
         // Make a request to the Imgflip API
         const response = await fetch("https://api.imgflip.com/caption_image", {
             method: "POST",
@@ -24,6 +27,9 @@ export const handler = async (event) => {
                 text1,
             }),
         });
+
+        // Debug the response from Imgflip
+        console.log("Imgflip API Response:", data);
 
         const data = await response.json();
 

@@ -20,7 +20,7 @@ if (toggleButton && navbarContainer) {
     });
 } else {
     console.error("Navbar toggle or container not found.");
-} 
+}
 
 // Static Memes Array
 const staticMemes = [
@@ -47,35 +47,16 @@ function addStaticMemesToGallery() {
     }
 }
 
-
-
-
-// Populate Gallery
-async function fetchDynamicMemes() {
-    try {
-      const response = await fetch(fetchMemesEndpoint);
-      const { memes } = await response.json();
-  
-      memes.forEach((meme) => {
-        const memeDiv = document.createElement("div");
-        memeDiv.className = "gallery-item";
-        memeDiv.innerHTML = `
-                <img src="${meme.url}" alt="Dynamic Meme" onclick="showMemeModal('${meme.url}')">
-            `;
-        memeCollection.appendChild(memeDiv);
-      });
-      console.log("Dynamic memes fetched and added to gallery.");
-    } catch (error) {
-      console.error("Error fetching memes:", error);
-    }
-  }
-
-
 // Generate Meme
 async function generateMemeWithImgflip() {
     const templateId = document.getElementById("templateId").value || "181913649";
     const topText = document.getElementById("topText").value.trim();
     const bottomText = document.getElementById("bottomText").value.trim();
+
+    console.log("Template ID before:", templateId);
+    console.log("Top Text before:", topText);
+    console.log("Bottom Text before:", bottomText);
+
 
     if (!topText || !bottomText) {
         alert("Please enter both top and bottom text.");
@@ -88,6 +69,10 @@ async function generateMemeWithImgflip() {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ template_id: templateId, text0: topText, text1: bottomText }),
         });
+
+        console.log("Template ID:", templateId);
+        console.log("Top Text:", topText);
+        console.log("Bottom Text:", bottomText);
 
         if (!response.ok) {
             throw new Error(`Failed to create meme: ${response.statusText}`);
@@ -106,6 +91,27 @@ async function generateMemeWithImgflip() {
     }
 }
 
+
+
+// Populate Gallery
+async function fetchDynamicMemes() {
+    try {
+        const response = await fetch(fetchMemesEndpoint);
+        const { memes } = await response.json();
+
+        memes.forEach((meme) => {
+            const memeDiv = document.createElement("div");
+            memeDiv.className = "gallery-item";
+            memeDiv.innerHTML = `
+                <img src="${meme.url}" alt="Dynamic Meme" onclick="showMemeModal('${meme.url}')">
+            `;
+            memeCollection.appendChild(memeDiv);
+        });
+        console.log("Dynamic memes fetched and added to gallery.");
+    } catch (error) {
+        console.error("Error fetching memes:", error);
+    }
+}
 
 
 // Show Modal
@@ -130,12 +136,21 @@ function closeModal() {
     modal.querySelector(".download-btn")?.remove(); // Cleanup
 }
 
-function downloadMeme(imageUrl) {
-    const link = document.createElement("a");
-    link.href = imageUrl;
-    link.download = "HHAM_Meme.jpg"; // Default file name
-    link.click();
-    console.log("Download initiated for:", imageUrl);
+async function downloadMeme(imageUrl) {
+    try {
+        const response = await fetch(imageUrl);
+        if (!response.ok) throw new Error("Failed to download meme.");
+
+        const blob = await response.blob();
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "meme.jpg"; // Default filename
+        link.click();
+
+        console.log("Meme downloaded successfully.");
+    } catch (error) {
+        console.error("Error downloading meme:", error);
+    }
 }
 
 
