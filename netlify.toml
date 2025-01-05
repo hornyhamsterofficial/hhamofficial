@@ -1,0 +1,9 @@
+[build]
+  command =   ""              # Adjust this if you're not building
+  publish = "public"        # Static files are served from the "public" directory
+  functions = "netlify"     # Functions directory for Netlify serverless functions
+
+[[redirects]]
+  from = "/*"
+  to = "/html/index.html"
+  status = 200

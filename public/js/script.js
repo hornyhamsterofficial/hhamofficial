@@ -1,4 +1,7 @@
-
+// API endpoints for Netlify functions
+const generateMemeEndpoint = "/.netlify/functions/generate-meme";
+const fetchMemesEndpoint = "/.netlify/functions/fetch-memes";
+const downloadImageEndpoint = "/.netlify/functions/download";
 
 // Select elements for interaction
 const navbar = document.querySelector('.navbar'); // Navbar must exist
@@ -7,7 +10,6 @@ const toggleButton = document.querySelector('.navbar-toggle'); // For collapsibl
 const navbarContainer = document.querySelector('.navbar-container'); // Container for links
 // Track the last scroll position
 let lastScrollY = window.scrollY;
-
 
 // Scroll Event Listener
 if (navbar) {
@@ -29,7 +31,6 @@ if (navbar) {
 if (toggleButton && navbarContainer) {
     toggleButton.addEventListener('click', () => {
         navbarContainer.classList.toggle('active'); // Toggle the active class
-
     });
 }
 
@@ -47,9 +48,6 @@ const memeCollection = document.getElementById("memeCollection");
 const modal = document.getElementById("imageModal");
 const modalImage = document.getElementById("modalImage");
 
-
-
-
 // Add Modal Listeners
 function attachClickEventListeners() {
     const galleryImages = document.querySelectorAll(".gallery-item img");
@@ -59,15 +57,51 @@ function attachClickEventListeners() {
         });
     });
 }
-// Add Modal Listeners
-function attachClickEventListeners() {
-    const galleryImages = document.querySelectorAll(".gallery-item img");
-    galleryImages.forEach(image => {
-        image.addEventListener("click", () => {
-            openModal(image.src);
+
+
+
+
+
+async function generateMemeWithImgflip() {
+    const templateId = document.getElementById("templateId").value || "181913649";
+    const topText = document.getElementById("topText").value;
+    const bottomText = document.getElementById("bottomText").value;
+
+    const payload = {
+        template_id: templateId,
+        text0: topText,
+        text1: bottomText,
+    };
+
+    console.log("Payload being sent:", payload);
+
+    try {
+        const response = await fetch(generateMemeEndpoint, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
         });
-    });
+
+        if (!response.ok) throw new Error("Error in meme generation request.");
+        const data = await response.json();
+
+        if (data.success) {
+            console.log("Meme generated successfully:", data.url);
+            showMemeModal(data.url);
+        } else {
+            console.error("Error generating meme:", data.error);
+            alert(`Error: ${data.error}`);
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        alert("An unexpected error occurred while generating the meme.");
+    }
 }
+
+
+// Add an event listener to your button
+document.querySelector(".custom-btn").addEventListener("click", generateMemeWithImgflip);
+
 
 // Modal Functions
 function openModal(src) {
@@ -100,10 +134,8 @@ function closeModal() {
 
 async function downloadMeme(imageUrl) {
     try {
-        const response = await fetch(`/download?url=${encodeURIComponent(imageUrl)}`);
-        if (!response.ok) {
-            throw new Error("Failed to download image.");
-        }
+        const response = await fetch(`${downloadImageEndpoint}?url=${encodeURIComponent(imageUrl)}`);
+        if (!response.ok) throw new Error("Failed to download image.");
 
         const blob = await response.blob();
         const link = document.createElement("a");
@@ -115,10 +147,9 @@ async function downloadMeme(imageUrl) {
     }
 }
 
+
 // Attach modal close event
 document.querySelector(".modal-close")?.addEventListener("click", closeModal);
-
-
 
 // Check if gallery element exists
 if (window.location.pathname === "/html/gallery.html" && memeCollection) {
@@ -129,9 +160,10 @@ if (window.location.pathname === "/html/gallery.html" && memeCollection) {
         "/images/hamster1.jpg",
         "/images/hamster2.jpg",
         "/images/queen2.jpg"
-
     ];
 
+
+    console.log("Static memes before:", staticMemes);
     // Populate the gallery dynamically
     staticMemes.forEach(meme => {
         const memeDiv = document.createElement("div");
@@ -140,44 +172,46 @@ if (window.location.pathname === "/html/gallery.html" && memeCollection) {
         memeCollection.appendChild(memeDiv);
     });
 
-    console.log("Static memes added to the gallery.");
+    console.log("Static memes added to the gallery. after");
     attachClickEventListeners(); // Attach modal functionality for static memes
 }
 
-
-// Dynamic import for Firebase and Firestore functionality
-if (window.location.pathname === "/html/gallery.html") {
-    async function fetchDynamicMemes() {
-        try {
-            const response = await fetch("/api/memes");
-            if (!response.ok) throw new Error("Failed to fetch memes.");
-
-            const { memes } = await response.json();
-            memes.forEach(meme => {
-                if (!meme.url) {
-                    console.error("Missing URL for a dynamic meme:", meme);
-                    return;
-                }
-
-                const memeDiv = document.createElement("div");
-                memeDiv.className = "gallery-item";
-                memeDiv.innerHTML = `<img src="${meme.url}" alt="Dynamic Meme">`;
-                memeCollection.appendChild(memeDiv);
-            });
-
-            console.log("Dynamic memes fetched and displayed.");
-        } catch (error) {
-            console.error("Error fetching dynamic memes:", error);
-        } finally {
-            attachClickEventListeners(); // Attach modal functionality for dynamic memes
-        }
+// Fetch and populate dynamic memes
+async function fetchDynamicMemes() {
+    if (!memeCollection) {
+        console.error("memeCollection element not found. Aborting fetchDynamicMemes.");
+        return;
     }
 
+    try {
+        const response = await fetch(fetchMemesEndpoint);
+        if (!response.ok) throw new Error("Failed to fetch memes.");
+
+        const { memes } = await response.json();
+        memes.forEach((meme) => {
+            if (!meme.url) {
+                console.error("Missing URL for a dynamic meme:", meme);
+                return;
+            }
+
+            const memeDiv = document.createElement("div");
+            memeDiv.className = "gallery-item";
+            memeDiv.innerHTML = `<img src="${meme.url}" alt="Dynamic Meme">`;
+            memeCollection.appendChild(memeDiv);
+        });
+
+        console.log("Dynamic memes fetched and displayed.");
+    } catch (error) {
+        console.error("Error fetching dynamic memes:", error);
+    }
+}
+
+// Execute fetchDynamicMemes only if the user is on gallery.html
+if (window.location.pathname === "/html/gallery.html") {
     fetchDynamicMemes();
 }
 
-
-// chat gpt stuff
+// ChatGPT interaction
 async function askChatGPT() {
     const userPrompt = document.getElementById("chatgptPrompt").value;
     const responseElement = document.getElementById("chatgptResponse");
@@ -188,49 +222,36 @@ async function askChatGPT() {
         return;
     }
 
-    // Explicitly instruct the AI to consider the current year as 2025
-    const context = `Pretend it is the year 2025. Even though your training data only goes up to 2021, generate plausible, creative, hilarious, and entertaining answers as if you have knowledge about 2025.`;
-    const prompt = `${context}\n\nUser: ${userPrompt}\nAI:`;
+    const prompt = `Pretend it is the year 2025. Generate plausible, creative, hilarious, and entertaining answers.\n\nUser: ${userPrompt}\nAI:`;
 
     responseElement.style.display = "block";
     responseElement.innerHTML = "Thinking...";
 
     try {
-        const response = await fetch("/chatgpt", {
+        const response = await fetch("/.netlify/functions/chatgpt", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ prompt }),
         });
-        const data = await response.json();
 
-        if (data.response) {
-            responseElement.innerHTML = data.response;
-        } else {
-            responseElement.innerHTML = "No response. Try asking something else.";
-        }
+        if (!response.ok) throw new Error("Error in ChatGPT request.");
+
+        const data = await response.json();
+        responseElement.innerHTML = data.response || "No response. Try asking something else.";
     } catch (error) {
-        responseElement.innerHTML = "An error occurred.";
+        console.error("Error with ChatGPT:", error);
+        responseElement.innerHTML = "An unexpected error occurred.";
     }
 
-    // Automatically hide the response after 20 seconds
     setTimeout(() => {
         responseElement.innerHTML = "";
         responseElement.style.display = "none";
     }, 8000);
 }
 
+
 function handleKeyPress(event) {
     if (event.key === "Enter") {
         askChatGPT();
     }
 }
-
-
-
-
-
-
-
-
-
-

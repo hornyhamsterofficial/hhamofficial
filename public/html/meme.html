@@ -553,16 +553,17 @@
             const templateId = document.getElementById("templateId").value || "112126428";
             const topText = document.getElementById("topText").value;
             const bottomText = document.getElementById("bottomText").value;
-    
+
             try {
-                const response = await fetch("/generate-meme", {
+                const generateMemeEndpoint = "/.netlify/functions/generate-meme";
+                const response = await fetch(generateMemeEndpoint, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ template_id: templateId, text0: topText, text1: bottomText }),
                 });
-    
+
                 const data = await response.json();
-    
+
                 if (data.success) {
                     const memeUrl = data.url;
                     console.log("Meme generated successfully:", memeUrl);
@@ -574,10 +575,10 @@
                 console.error("Error generating meme:", error);
             }
         }
-    
+
         document.querySelector(".custom-btn").addEventListener("click", generateMemeWithImgflip);
     </script>
-    
+
 
 
     <script>
@@ -608,7 +609,7 @@
         }, 3400); // Adjust the interval as needed (5000ms = 5 seconds)
 
 
-        
+
 
         function showMemeModal(imageUrl) {
             console.log("Displaying meme in modal:", imageUrl);
