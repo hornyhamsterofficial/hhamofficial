@@ -553,16 +553,16 @@
             const templateId = document.getElementById("templateId").value || "112126428";
             const topText = document.getElementById("topText").value;
             const bottomText = document.getElementById("bottomText").value;
-    
+
             try {
                 const response = await fetch("/generate-meme", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ template_id: templateId, text0: topText, text1: bottomText }),
                 });
-    
+
                 const data = await response.json();
-    
+
                 if (data.success) {
                     const memeUrl = data.url;
                     console.log("Meme generated successfully:", memeUrl);
@@ -574,10 +574,10 @@
                 console.error("Error generating meme:", error);
             }
         }
-    
+
         document.querySelector(".custom-btn").addEventListener("click", generateMemeWithImgflip);
     </script>
-    
+
 
 
     <script>
@@ -608,7 +608,23 @@
         }, 3400); // Adjust the interval as needed (5000ms = 5 seconds)
 
 
-        
+        async function downloadMeme(imageUrl) {
+            try {
+                const response = await fetch(`/download?url=${encodeURIComponent(imageUrl)}`);
+                if (!response.ok) {
+                    throw new Error("Failed to download image.");
+                }
+
+                const blob = await response.blob();
+                const link = document.createElement("a");
+                link.href = URL.createObjectURL(blob);
+                link.download = imageUrl.split("/").pop();
+                link.click();
+            } catch (error) {
+                console.error("Error downloading meme:", error);
+            }
+        }
+
 
         function showMemeModal(imageUrl) {
             console.log("Displaying meme in modal:", imageUrl);
@@ -640,15 +656,9 @@
             console.log("modalclosed");
 
         }
-        function downloadMeme(imageUrl) {
-            const link = document.createElement("a");
-            link.href = imageUrl;
-            link.download = "meme.jpg"; // Default file name
-            document.body.appendChild(link); // Append the link for triggering
-            link.click(); // Simulate the click
-            document.body.removeChild(link); // Clean up after download
-            console.log("Download initiated for:", imageUrl);
-        }
+
+        
+
 
 
 

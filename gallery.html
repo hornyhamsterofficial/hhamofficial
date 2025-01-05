@@ -283,13 +283,29 @@
         }
     
         // Function to download meme
-        function downloadMeme(imageUrl) {
-            const link = document.createElement("a");
-            link.href = imageUrl;
-            link.download = "meme.jpg";
-            link.click();
-        }
-    
+        async function downloadMeme(imageUrl) {
+    try {
+        // Fetch the image as a blob
+        const response = await fetch(imageUrl, { mode: 'cors' }); // Ensure CORS is allowed for cross-origin images
+        if (!response.ok) throw new Error(`Failed to fetch image: ${response.statusText}`);
+        
+        const blob = await response.blob();
+
+        // Create a temporary download link
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = `meme_${Date.now()}.jpg`; // Dynamically name the file with a timestamp
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link); // Clean up
+
+        console.log(`Meme downloaded successfully from: ${imageUrl}`);
+    } catch (error) {
+        console.error("Error downloading meme:", error);
+        alert("Failed to download meme. Please try again.");
+    }
+}
+
         // Add static memes and fetch dynamic memes on page load
         document.querySelector(".modal-close").addEventListener("click", closeModal);
         addStaticMemes(); // Add static memes first

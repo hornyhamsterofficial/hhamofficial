@@ -20,12 +20,12 @@ const PORT = process.env.PORT || 3000;
 
 // Initialize Firebase
 const firebaseConfig = {
-    apiKey: process.env.FIREBASE_API_KEY,
-    authDomain: process.env.FIREBASE_AUTH_DOMAIN,
-    projectId: process.env.FIREBASE_PROJECT_ID,
-    storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
-    messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
-    appId: process.env.FIREBASE_APP_ID,
+    apiKey: "AIzaSyDH1xf4EomoEN1MS9qrDVa9Y9ld03hg85Q",
+    authDomain: "memegallery-38238.firebaseapp.com",
+    projectId: "memegallery-38238",
+    storageBucket: "985961553540",
+    messagingSenderId: "985961553540",
+    appId: "985961553540:web:d974213033ccdc62366cd1",
 };
 
 
@@ -40,7 +40,7 @@ app.get("/", (req, res) => {
 // ChatGPT API route
 app.post("/chatgpt", async (req, res) => {
     const { prompt } = req.body;
-    const apiKey = process.env.OPENAI_API_KEY; // Replace with your OpenAI API key
+    const apiKey = "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"; // Replace with your OpenAI API key
 
     if (!prompt) {
         return res.status(400).json({ error: "Prompt is required." });
@@ -94,8 +94,8 @@ app.post('/generate-meme', async (req, res) => {
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
             body: new URLSearchParams({
                 template_id,
-                username: process.env.IMGFLIP_USERNAME,
-                password: process.env.IMGFLIP_PASSWORD,
+                username: "hornyhamsterofficial",
+                password: "abc123ABC123!",
                 text0,
                 text1,
                 no_watermark: "true",
@@ -122,13 +122,13 @@ app.post('/generate-meme', async (req, res) => {
 
 app.get('/firebase-config', (req, res) => {
     res.json({
-        apiKey: process.env.FIREBASE_API_KEY,
-        authDomain: process.env.FIREBASE_AUTH_DOMAIN,
-        projectId: process.env.FIREBASE_PROJECT_ID,
-        storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
-        messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
-        appId: process.env.FIREBASE_APP_ID,
-        measurementId: process.env.FIREBASE_MEASUREMENT_ID,
+        apiKey: "AIzaSyDH1xf4EomoEN1MS9qrDVa9Y9ld03hg85Q",
+        authDomain: "memegallery-38238.firebaseapp.com",
+        projectId: "memegallery-38238",
+        storageBucket: "985961553540",
+        messagingSenderId: "985961553540",
+        appId: "985961553540:web:d974213033ccdc62366cd1",
+        measurementId: "G-78B4V070RK",
     });
 });
 
