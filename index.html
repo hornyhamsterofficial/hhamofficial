@@ -31,6 +31,7 @@
     <div class="landing">
         <h1 id="animated-title" >Horny Hamster</h1>
         <h6 id="animated-title-two" onclick="copyText()">CA: thisisAtest12345</h6>
+        <span id="copiedMessage" class="copied-message">Copied to clipboard!</span>
         <img src="fire2.png" alt="HornyHamster Logo" class="logo">
         <div class="social-icons-container">
             <h2 class="flashing-text">Join The Burrow Here</h2>
@@ -45,12 +46,12 @@
 
     <script>
         function copyText() {
-            const text = document.getElementById("animated-title-two").innerText;
+            const text = document.getElementById("animated-title-two").innerText;  // Get the text
             navigator.clipboard.writeText(text).then(() => {
-                const alertMessage = document.getElementById("alert");
-                alertMessage.style.display = 'block'; // Show confirmation
+                const message = document.getElementById("copiedMessage");
+                message.style.display = 'inline'; // Show the copied message
                 setTimeout(() => {
-                    alertMessage.style.display = 'none'; // Hide after 3 seconds
+                    message.style.display = 'none'; // Hide after 3 seconds
                 }, 3000);
             }).catch(err => {
                 console.error("Failed to copy text: ", err);
