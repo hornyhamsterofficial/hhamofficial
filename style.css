@@ -132,7 +132,7 @@ body {
     font-family: 'Playfair Display', serif;
     display: inline-block;
     font-size: 1.6rem;
-    color: rgba(24, 173, 8, 0.834);
+    color: rgba(167, 140, 140, 0.864);
     margin-top: 2px;
     text-align: center;
     animation: slideFromTheRight 2s ease-in-out; /* Slide-in animation */
@@ -143,7 +143,7 @@ body {
 }
 
 #copiedMessage {
-    color: rgba(0, 0, 0, 0.401); 
+    color: #ac571a; 
     text-align: center;
     font-size: .9rem;
     margin-top: -30px;
