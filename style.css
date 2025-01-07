@@ -110,6 +110,19 @@ body {
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 3);
 }
 
+
+#animated-title-two {
+    position: relative; /* Needed for animation */
+    font-family: 'Playfair Display', serif;
+    font-size: 6rem;
+    color: rgb(82, 75, 75);
+    text-decoration: underline;
+    
+    text-align: center;
+    animation: slideIn 2s ease-in-out; /* Slide-in animation */
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 3);
+}
 /* Keyframes for the Sliding Animation */
 @keyframes slideIn {
     from {
