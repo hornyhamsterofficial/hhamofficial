@@ -90,6 +90,7 @@ body {
     min-height: calc(100vh - 80px); /* Subtract the height of the navbar and footer */
     padding: 20px;
     flex: 1;
+    text-align: center;
 }
 
 .logo {
@@ -127,7 +128,7 @@ body {
     font-size: 1.6rem;
     display: inline-block;
     color: rgb(82, 75, 75);
-    margin-top: -27px;
+    margin-top: 2px;
     text-align: center;
     animation: slideFromTheRight 2s ease-in-out; /* Slide-in animation */
     transition: opacity 0.3s ease, transform 0.3s ease;
@@ -140,8 +141,8 @@ body {
     display: none;
     color: green;
     font-weight: bold;
-    margin-left: 10px; /* Space between the text and message */
-    font-size: 0.9em;
+    margin-left: 5px; /* Space between the text and message */
+    font-size: 0.7em;
 }
 
 #animated-title-two:hover {
