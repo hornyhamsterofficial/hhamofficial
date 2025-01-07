@@ -110,16 +110,25 @@ body {
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 3);
 }
 
+@keyframes slideFromTheRight {
+    from {
+        transform: translateX(100%); /* Start off the screen to the right */
+        opacity: 0; /* Optional: Start transparent */
+    }
+    to {
+        transform: translateX(0); /* End at its original position */
+        opacity: 1; /* Optional: Fully visible */
+    }
+}
 
 #animated-title-two {
     position: relative; /* Needed for animation */
     font-family: 'Playfair Display', serif;
-    font-size: 1rem;
+    font-size: 1.5rem;
     color: rgb(82, 75, 75);
-    text-decoration: underline;
-    
+    margin-top: -30px;
     text-align: center;
-    animation: slideIn 2s ease-in-out; /* Slide-in animation */
+    animation: slideFromTheRight 2s ease-in-out; /* Slide-in animation */
     transition: opacity 0.3s ease, transform 0.3s ease;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 3);
 }
