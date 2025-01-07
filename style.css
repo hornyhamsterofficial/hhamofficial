@@ -107,6 +107,7 @@ body {
     position: relative; /* Needed for animation */
     font-family: 'Playfair Display', serif;
     font-size: 6rem;
+    margin-top: -10px; 
     color: rgb(255, 255, 255);
     text-align: center;
     animation: slideIn 2s ease-in-out; /* Slide-in animation */
@@ -128,7 +129,7 @@ body {
 #animated-title-two {
     position: relative; /* Needed for animation */
     font-family: 'Playfair Display', serif;
-    display: block;
+    display: inline-block;
     font-size: 1.6rem;
     color: rgb(82, 75, 75);
     margin-top: 2px;
@@ -140,24 +141,11 @@ body {
     cursor: pointer;
 }
 
-.copied-message {
-    display: none;
-    color: green;
-    font-weight: bold;
-    font-size: 0.7em;
-    position: relative; /* Needed for animation */
-    font-family: 'Playfair Display', serif;
-    color: rgb(82, 75, 75);
-    margin-top: 2px;
+#copiedMessage {
+    color: rgba(255, 255, 255, 0.81); 
     text-align: center;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 3);
-    user-select: none;
-    cursor: pointer;
+    font-size: .8rem;
 }
-
-
-
-
 
 #animated-title-two:hover {
    
