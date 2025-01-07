@@ -29,8 +29,8 @@
 
     <!-- Landing Page Content -->
     <div class="landing">
-        <h1 id="animated-title">Horny Hamster</h1>
-        <button id="animated-title-two" onclick="copyText()">CA: thisisAtest12345</button>
+        <h1 id="animated-title" onclick="copyText()">Horny Hamster</h1>
+        <h6 id="animated-title-two">CA: thisisAtest12345</h6>
         <img src="fire2.png" alt="HornyHamster Logo" class="logo">
         <div class="social-icons-container">
             <h2 class="flashing-text">Join The Burrow Here</h2>
@@ -42,16 +42,22 @@
             </div>
         </div>
     </div>
+
     <script>
         function copyText() {
-            const text = document.getElementById("textToCopy").innerText;
+            const text = document.getElementById("copyText").innerText;
             navigator.clipboard.writeText(text).then(() => {
-                alert("Text copied to clipboard!");
+                const alertMessage = document.getElementById("alert");
+                alertMessage.style.display = 'block'; // Show confirmation
+                setTimeout(() => {
+                    alertMessage.style.display = 'none'; // Hide after 3 seconds
+                }, 3000);
             }).catch(err => {
                 console.error("Failed to copy text: ", err);
             });
         }
     </script>
+
     <!-- Footer  -->
     <!-- <footer class="footer">
         <p>HornyHamster © 2025 | Release Date: Jan 7, 2025</p>
