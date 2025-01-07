@@ -107,7 +107,7 @@ body {
     position: relative; /* Needed for animation */
     font-family: 'Playfair Display', serif;
     font-size: 6rem;
-    margin-top: -10px; 
+    margin-top: -5px; 
     color: rgb(255, 255, 255);
     text-align: center;
     animation: slideIn 2s ease-in-out; /* Slide-in animation */
@@ -142,7 +142,7 @@ body {
 }
 
 #copiedMessage {
-    color: rgba(125, 111, 73, 0.519); 
+    color: rgba(0, 0, 0, 0.401); 
     text-align: center;
     font-size: .9rem;
     margin-top: -30px;
