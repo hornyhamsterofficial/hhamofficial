@@ -29,8 +29,8 @@
 
     <!-- Landing Page Content -->
     <div class="landing">
-        <h1 id="animated-title" onclick="copyText()">Horny Hamster</h1>
-        <h6 id="animated-title-two">CA: thisisAtest12345</h6>
+        <h1 id="animated-title" >Horny Hamster</h1>
+        <h6 id="animated-title-two" onclick="copyText()">CA: thisisAtest12345</h6>
         <img src="fire2.png" alt="HornyHamster Logo" class="logo">
         <div class="social-icons-container">
             <h2 class="flashing-text">Join The Burrow Here</h2>
@@ -45,7 +45,7 @@
 
     <script>
         function copyText() {
-            const text = document.getElementById("copyText").innerText;
+            const text = document.getElementById("animated-title-two").innerText;
             navigator.clipboard.writeText(text).then(() => {
                 const alertMessage = document.getElementById("alert");
                 alertMessage.style.display = 'block'; // Show confirmation
