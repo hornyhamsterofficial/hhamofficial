@@ -52,7 +52,7 @@
                 message.style.display = 'inline'; // Show the copied message
                 setTimeout(() => {
                     message.style.display = 'none'; // Hide after 3 seconds
-                }, 3000);
+                }, 200);
             }).catch(err => {
                 console.error("Failed to copy text: ", err);
             });

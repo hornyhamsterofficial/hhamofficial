@@ -126,7 +126,6 @@ body {
     position: relative; /* Needed for animation */
     font-family: 'Playfair Display', serif;
     font-size: 1.6rem;
-    display: inline-block;
     color: rgb(82, 75, 75);
     margin-top: 2px;
     text-align: center;
@@ -141,13 +140,12 @@ body {
     display: none;
     color: green;
     font-weight: bold;
-    margin-left: 5px; /* Space between the text and message */
     font-size: 0.7em;
 }
 
 #animated-title-two:hover {
    
-    background-color: rgba(243, 208, 34, 0.345); /* Subtle background color */
+    background-color: rgba(253, 231, 120, 0.708); /* Subtle background color */
     color: white; /* Change text color on hover */
     padding: 2px 5px; /* Maintain consistent padding on hover */
 }
