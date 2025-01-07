@@ -114,7 +114,7 @@ body {
 #animated-title-two {
     position: relative; /* Needed for animation */
     font-family: 'Playfair Display', serif;
-    font-size: 6rem;
+    font-size: 1rem;
     color: rgb(82, 75, 75);
     text-decoration: underline;
     
