@@ -131,7 +131,7 @@ body {
     font-family: 'Playfair Display', serif;
     display: inline-block;
     font-size: 1.6rem;
-    color: rgb(82, 75, 75);
+    color: rgba(24, 173, 8, 0.834);
     margin-top: 2px;
     text-align: center;
     animation: slideFromTheRight 2s ease-in-out; /* Slide-in animation */
@@ -142,9 +142,10 @@ body {
 }
 
 #copiedMessage {
-    color: rgba(255, 255, 255, 0.81); 
+    color: rgba(125, 111, 73, 0.519); 
     text-align: center;
-    font-size: .8rem;
+    font-size: .9rem;
+    margin-top: -30px;
 }
 
 #animated-title-two:hover {
