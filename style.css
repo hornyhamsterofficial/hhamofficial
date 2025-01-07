@@ -147,11 +147,12 @@ body {
     text-align: center;
     font-size: .9rem;
     margin-top: -30px;
+    text-transform: uppercase;
 }
 
 #animated-title-two:hover {
    
-    background-color: rgba(253, 231, 120, 0.708); /* Subtle background color */
+    background-color: none; 
     color: white; /* Change text color on hover */
     padding: 2px 5px; /* Maintain consistent padding on hover */
 }
