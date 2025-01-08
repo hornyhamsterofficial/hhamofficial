@@ -134,6 +134,7 @@ body {
     font-size: 1.6rem;
     color: rgba(167, 140, 140, 0.864);
     margin-top: 2px;
+    margin-right: 80px;
     text-align: center;
     animation: slideFromTheRight 2s ease-in-out; /* Slide-in animation */
     transition: opacity 0.3s ease, transform 0.3s ease;
